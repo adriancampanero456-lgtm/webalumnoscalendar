@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Calendario - 3º ESO</title>
+    <link rel="stylesheet" href="estilos.css">
+</head>
+<body>
+
+<header>
+    <h1>Calendario - Tercer Trimestre - 3º ESO</h1>
+</header>
+
+<div class="contenedor">
+
+    <!-- MENÚ -->
+    <div class="menu">
+        <button id="btnALL" onclick="filtrar('ALL')">Todos</button>
+        <button onclick="filtrar('E')">Exámenes</button>
+        <button onclick="filtrar('T')">Trabajos</button>
+        <button onclick="filtrar('C')">Cumpleaños</button>
+    </div>
+
+    <!-- ZONA DERECHA -->
+    <div class="zona-calendario">
+
+        <!-- CONTROL MES -->
+        <div class="mes-control">
+            <button onclick="cambiarMes(-1)">⬅</button>
+            <span id="mesActual"></span>
+            <button onclick="cambiarMes(1)">➡</button>
+        </div>
+
+        <!-- DÍAS SEMANA -->
+        <div class="dias-semana">
+            <div>L</div>
+            <div>M</div>
+            <div>X</div>
+            <div>J</div>
+            <div>V</div>
+        </div>
+
+        <!-- CALENDARIO -->
+        <div class="calendario" id="calendario"></div>
+
+    </div>
+
+</div>
+
+<script>
+let eventos = [];
+let filtroActual = "ALL"; // 🔥 ya empieza en TODOS
+let mesActual = new Date().getMonth() + 1;
+
+const nombresMeses = [
+    "Enero","Febrero","Marzo","Abril","Mayo","Junio",
+    "Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre"
+];
+
+// 🔥 Cargar datos
+fetch("datos.txt")
+    .then(res => res.text())
+    .then(texto => {
+        const lineas = texto.trim().split("\n");
+
+        eventos = lineas.map(linea => {
+            const [dia, mes, categoria, descripcion] = linea.split(",");
+            return {
+                dia: parseInt(dia),
+                mes: parseInt(mes),
+                categoria: categoria,
+                descripcion: descripcion
+            };
+        });
+
+        actualizarVista();
+    });
+
+// 🔥 Vista general
+function actualizarVista() {
+    document.getElementById("mesActual").textContent = nombresMeses[mesActual - 1];
+    generarCalendario(mesActual);
+}
+
+// 🔥 Generar calendario REAL (2026, lunes-viernes)
+function generarCalendario(mes) {
+    const calendario = document.getElementById("calendario");
+    calendario.innerHTML = "";
+
+    const diasMes = new Date(2026, mes, 0).getDate();
+
+    let primerDia = new Date(2026, mes - 1, 1).getDay();
+    primerDia = (primerDia === 0) ? 6 : primerDia - 1; // lunes = 0
+
+    let diaActual = 1;
+
+    // Máximo 6 semanas
+    for (let semana = 0; semana < 6; semana++) {
+
+        for (let diaSemana = 0; diaSemana < 7; diaSemana++) {
+
+            // ❌ saltar sábado (5) y domingo (6)
+            if (diaSemana >= 5) continue;
+
+            const celda = document.createElement("div");
+
+            // Antes de empezar el mes
+            if (semana === 0 && diaSemana < primerDia) {
+                calendario.appendChild(celda);
+                continue;
+            }
+
+            // Si ya no hay días
+            if (diaActual > diasMes) {
+                calendario.appendChild(celda);
+                continue;
+            }
+
+            const fecha = new Date(2026, mes - 1, diaActual);
+            const diaReal = fecha.getDay();
+
+            // ❌ si cae en finde, saltar sin avanzar columna
+            if (diaReal === 0 || diaReal === 6) {
+                diaActual++;
+                diaSemana--; // 🔥 clave: no avanzar columna
+                continue;
+            }
+
+            celda.classList.add("dia");
+            celda.innerHTML = `<strong>${diaActual}</strong>`;
+
+            const eventosDia = eventos.filter(e =>
+                Number(e.dia) === diaActual && Number(e.mes) === mes
+            );
+
+            eventosDia.forEach(e => {
+                if (filtroActual === "ALL" || filtroActual === e.categoria) {
+                    const eventoDiv = document.createElement("div");
+                    eventoDiv.classList.add("evento", e.categoria);
+
+                    eventoDiv.textContent = e.descripcion;
+
+                    eventoDiv.onclick = () => {
+                        alert(e.descripcion);
+                    };
+
+                    celda.appendChild(eventoDiv);
+                }
+            });
+
+            calendario.appendChild(celda);
+            diaActual++;
+        }
+    }
+}
+
+// 🔥 Filtro
+function filtrar(cat) {
+    filtroActual = cat;
+    actualizarVista();
+}
+
+// 🔥 Cambiar mes
+function cambiarMes(direccion) {
+    mesActual += direccion;
+
+    if (mesActual < 1) mesActual = 12;
+    if (mesActual > 12) mesActual = 1;
+
+    actualizarVista();
+}
+</script>
+
+</body>
+</html>

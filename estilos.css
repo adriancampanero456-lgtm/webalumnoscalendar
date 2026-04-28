@@ -1,0 +1,127 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    background: #f4f4f4;
+}
+
+header {
+    background: #222;
+    color: white;
+    padding: 15px;
+    text-align: center;
+}
+
+.contenedor {
+    display: flex;
+}
+
+/* MENÚ */
+.menu {
+    width: 200px;
+    background: #333;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+}
+
+.menu button {
+    margin: 5px 0;
+    padding: 10px;
+    border: none;
+    background: #555;
+    color: white;
+    cursor: pointer;
+}
+
+.menu button:hover {
+    background: #777;
+}
+
+/* CALENDARIO */
+.calendario {
+    flex: 1;
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 10px;
+    padding: 10px;
+}
+
+.dia {
+    background: white;
+    padding: 10px;
+    min-height: 80px;
+    border-radius: 8px;
+    box-shadow: 0 0 5px rgba(0,0,0,0.1);
+}
+
+/* EVENTOS */
+.evento {
+    margin-top: 5px;
+    padding: 3px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 12px;
+}
+
+/* COLORES */
+.E { background: red; color: white; }
+.T { background: orange; }
+.C { background: green; color: white; }
+
+.zona-calendario {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+/* CONTROL DE MES */
+.mes-control {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    padding: 10px;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.mes-control button {
+    padding: 8px 12px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+/* ZONA DERECHA */
+.zona-calendario {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+/* CONTROL MES */
+.mes-control {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    padding: 10px;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+/* DÍAS SEMANA */
+.dias-semana {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    text-align: center;
+    font-weight: bold;
+    padding: 5px;
+}
+
+/* CALENDARIO */
+.calendario {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 10px;
+    padding: 10px;
+}

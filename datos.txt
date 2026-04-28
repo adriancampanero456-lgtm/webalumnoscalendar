@@ -1,0 +1,4 @@
+12,4,E,Examen de matemáticas
+15,4,T,Entrega de historia
+20,4,C,Cumpleaños de Juan
+25,4,E,Examen de inglés
