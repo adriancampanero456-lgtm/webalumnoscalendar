@@ -1,9 +1,10 @@
 28,4,E,Examen de Matemáticas T.7
-30,4,E,Examen de Física y Química T.3 (ej 43-68)
+4,5,E,Examen de Física y Química T.3 (ej 43-68)
 6,5,E,Examen de Inglés T.7
 7,5,T,Entrega Speaking Inglés 
 7,5,T,Traer libro de lectura de Inglés
 14,5,E,Examen de Biología Sistema Nervioso
+7,5,E,Examen Geografía e Historia: Una época entre dos edades
 18,5,E,Examen libro de Inglés TITANIC
 4,6,T,Entrega writing Inglés
 4,6,E,Examen Global de Inglés
