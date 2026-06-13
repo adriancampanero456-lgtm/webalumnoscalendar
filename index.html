@@ -9,11 +9,11 @@
 
 <header>
     <h1>Calendario - Tercer Trimestre - 3º ESO</h1>
+    <h2 id="hoy"></h2>
 </header>
 
 <div class="contenedor">
 
-    <!-- MENÚ -->
     <div class="menu">
         <button id="btnALL" onclick="filtrar('ALL')">Todos</button>
         <button onclick="filtrar('E')">Exámenes</button>
@@ -21,17 +21,14 @@
         <button onclick="filtrar('C')">Cumpleaños</button>
     </div>
 
-    <!-- ZONA DERECHA -->
     <div class="zona-calendario">
 
-        <!-- CONTROL MES -->
         <div class="mes-control">
             <button onclick="cambiarMes(-1)">⬅</button>
             <span id="mesActual"></span>
             <button onclick="cambiarMes(1)">➡</button>
         </div>
 
-        <!-- DÍAS SEMANA -->
         <div class="dias-semana">
             <div>L</div>
             <div>M</div>
@@ -40,7 +37,6 @@
             <div>V</div>
         </div>
 
-        <!-- CALENDARIO -->
         <div class="calendario" id="calendario"></div>
 
     </div>
@@ -49,7 +45,7 @@
 
 <script>
 let eventos = [];
-let filtroActual = "ALL"; // 🔥 ya empieza en TODOS
+let filtroActual = "ALL";
 let mesActual = new Date().getMonth() + 1;
 
 const nombresMeses = [
@@ -57,7 +53,6 @@ const nombresMeses = [
     "Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre"
 ];
 
-// 🔥 Cargar datos
 fetch("datos.txt")
     .then(res => res.text())
     .then(texto => {
@@ -65,24 +60,17 @@ fetch("datos.txt")
 
         eventos = lineas.map(linea => {
             const [dia, mes, categoria, descripcion] = linea.split(",");
-            return {
-                dia: parseInt(dia),
-                mes: parseInt(mes),
-                categoria: categoria,
-                descripcion: descripcion
-            };
+            return { dia: parseInt(dia), mes: parseInt(mes), categoria, descripcion };
         });
 
         actualizarVista();
     });
 
-// 🔥 Vista general
 function actualizarVista() {
     document.getElementById("mesActual").textContent = nombresMeses[mesActual - 1];
     generarCalendario(mesActual);
 }
 
-// 🔥 Generar calendario REAL (2026, lunes-viernes)
 function generarCalendario(mes) {
     const calendario = document.getElementById("calendario");
     calendario.innerHTML = "";
@@ -90,27 +78,22 @@ function generarCalendario(mes) {
     const diasMes = new Date(2026, mes, 0).getDate();
 
     let primerDia = new Date(2026, mes - 1, 1).getDay();
-    primerDia = (primerDia === 0) ? 6 : primerDia - 1; // lunes = 0
+    primerDia = (primerDia === 0) ? 6 : primerDia - 1;
 
     let diaActual = 1;
 
-    // Máximo 6 semanas
     for (let semana = 0; semana < 6; semana++) {
-
         for (let diaSemana = 0; diaSemana < 7; diaSemana++) {
 
-            // ❌ saltar sábado (5) y domingo (6)
             if (diaSemana >= 5) continue;
 
             const celda = document.createElement("div");
 
-            // Antes de empezar el mes
             if (semana === 0 && diaSemana < primerDia) {
                 calendario.appendChild(celda);
                 continue;
             }
 
-            // Si ya no hay días
             if (diaActual > diasMes) {
                 calendario.appendChild(celda);
                 continue;
@@ -119,10 +102,9 @@ function generarCalendario(mes) {
             const fecha = new Date(2026, mes - 1, diaActual);
             const diaReal = fecha.getDay();
 
-            // ❌ si cae en finde, saltar sin avanzar columna
             if (diaReal === 0 || diaReal === 6) {
                 diaActual++;
-                diaSemana--; // 🔥 clave: no avanzar columna
+                diaSemana--;
                 continue;
             }
 
@@ -137,13 +119,8 @@ function generarCalendario(mes) {
                 if (filtroActual === "ALL" || filtroActual === e.categoria) {
                     const eventoDiv = document.createElement("div");
                     eventoDiv.classList.add("evento", e.categoria);
-
                     eventoDiv.textContent = e.descripcion;
-
-                    eventoDiv.onclick = () => {
-                        alert(e.descripcion);
-                    };
-
+                    eventoDiv.onclick = () => alert(e.descripcion);
                     celda.appendChild(eventoDiv);
                 }
             });
@@ -154,13 +131,11 @@ function generarCalendario(mes) {
     }
 }
 
-// 🔥 Filtro
 function filtrar(cat) {
     filtroActual = cat;
     actualizarVista();
 }
 
-// 🔥 Cambiar mes
 function cambiarMes(direccion) {
     mesActual += direccion;
 
@@ -169,6 +144,19 @@ function cambiarMes(direccion) {
 
     actualizarVista();
 }
+
+/* 🔥 NUEVO: mostrar día de hoy */
+function mostrarDiaHoy() {
+    const hoy = new Date();
+
+    const dias = ["domingo","lunes","martes","miércoles","jueves","viernes","sábado"];
+    const meses = ["enero","febrero","marzo","abril","mayo","junio","julio","agosto","septiembre","octubre","noviembre","diciembre"];
+
+    document.getElementById("hoy").textContent =
+        `Hoy es ${dias[hoy.getDay()]} ${hoy.getDate()} de ${meses[hoy.getMonth()]} de ${hoy.getFullYear()}`;
+}
+
+mostrarDiaHoy();
 </script>
 
 </body>
