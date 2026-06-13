@@ -1,7 +1,7 @@
 
 
-14,6,E,Global Biología
-15,6,E,Don Juan Tenorio
+15,6,E,Global Biología
+16,6,E,Don Juan Tenorio
 
 18,6,E,Global Mates
 
