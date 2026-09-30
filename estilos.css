@@ -2,11 +2,21 @@
     box-sizing: border-box;
 }
 
+
+/* ==========================================
+   CUERPO
+========================================== */
+
 body {
     margin: 0;
-    font-family: Arial, Helvetica, sans-serif;
+
+    font-family:
+        Arial,
+        Helvetica,
+        sans-serif;
 
     background: #f1f5f9;
+
     color: #1e293b;
 
     min-height: 100vh;
@@ -17,37 +27,53 @@ body {
 }
 
 
-/* =========================
+/* ==========================================
    CABECERA
-========================= */
+========================================== */
 
 header {
     position: relative;
+
     text-align: center;
-    padding: 12px 60px 6px 10px;
+
+    padding:
+        12px
+        60px
+        6px
+        10px;
+
+    animation:
+        aparecer
+        0.5s
+        ease;
 }
 
 header h1 {
     margin: 0;
+
     font-size: 25px;
 }
 
 header h2 {
     margin: 2px 0;
+
     font-size: 16px;
+
     color: #64748b;
 }
 
 header h3 {
     margin: 3px 0;
+
     font-size: 12px;
+
     color: #94a3b8;
 }
 
 
-/* =========================
+/* ==========================================
    BOTÓN TEMA
-========================= */
+========================================== */
 
 .tema-btn {
     position: absolute;
@@ -59,9 +85,11 @@ header h3 {
     height: 42px;
 
     border: none;
+
     border-radius: 50%;
 
     background: #ffffff;
+
     color: #1e293b;
 
     font-size: 21px;
@@ -69,7 +97,8 @@ header h3 {
     cursor: pointer;
 
     box-shadow:
-        0 3px 10px rgba(0,0,0,0.15);
+        0 3px 10px
+        rgba(0, 0, 0, 0.15);
 
     transition:
         background 0.4s ease,
@@ -78,104 +107,210 @@ header h3 {
 }
 
 .tema-btn:hover {
-    transform: rotate(20deg) scale(1.1);
+    transform:
+        rotate(20deg)
+        scale(1.1);
+}
+
+.tema-btn:active {
+    transform:
+        scale(0.9);
 }
 
 
-/* =========================
+/* ==========================================
    CONTENEDOR
-========================= */
+========================================== */
 
 .contenedor {
     width: 97%;
+
     max-width: 1250px;
 
     margin: auto;
+
+    padding-bottom: 15px;
 }
 
 
-/* =========================
+/* ==========================================
+   ERROR BASE DE DATOS
+========================================== */
+
+.error-db {
+    display: none;
+
+    width: 90%;
+
+    max-width: 800px;
+
+    margin: 80px auto;
+
+    padding:
+        35px 25px;
+
+    text-align: center;
+
+    background: #fee2e2;
+
+    color: #dc2626;
+
+    border:
+        3px solid
+        #dc2626;
+
+    border-radius: 15px;
+
+    font-size: 28px;
+
+    font-weight: bold;
+
+    line-height: 1.3;
+
+    box-shadow:
+        0 8px 25px
+        rgba(220, 38, 38, 0.25);
+
+    animation:
+        aparecerError
+        0.4s
+        ease;
+}
+
+
+@keyframes aparecerError {
+
+    from {
+        opacity: 0;
+
+        transform:
+            scale(0.9);
+    }
+
+    to {
+        opacity: 1;
+
+        transform:
+            scale(1);
+    }
+
+}
+
+
+/* ==========================================
    MENÚ
-========================= */
+========================================== */
 
 .menu {
     display: flex;
+
     justify-content: center;
+
+    align-items: center;
+
     flex-wrap: wrap;
 
     gap: 6px;
+
     margin: 5px 0;
 }
 
 .menu button {
     border: none;
 
-    padding: 7px 12px;
+    padding:
+        7px 12px;
 
     border-radius: 8px;
 
     background: #ffffff;
+
     color: #334155;
 
     font-size: 12px;
+
     font-weight: 600;
 
     cursor: pointer;
 
     box-shadow:
-        0 2px 7px rgba(0,0,0,0.08);
+        0 2px 7px
+        rgba(0, 0, 0, 0.08);
 
     transition:
         background 0.4s ease,
         color 0.4s ease,
-        transform 0.2s ease;
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
 }
 
 .menu button:hover {
-    transform: translateY(-2px);
+
+    transform:
+        translateY(-2px);
+
+    box-shadow:
+        0 5px 12px
+        rgba(0, 0, 0, 0.12);
+}
+
+.menu button:active {
+
+    transform:
+        scale(0.95);
 }
 
 
-/* =========================
+/* ==========================================
    LEYENDA
-========================= */
+========================================== */
 
 .leyenda {
     display: flex;
 
     justify-content: center;
+
     align-items: center;
 
     flex-wrap: wrap;
 
     gap: 10px;
 
-    margin: 5px auto;
+    margin:
+        5px auto;
 
-    padding: 7px 10px;
+    padding:
+        7px 10px;
 
     background: #ffffff;
+
+    color: #334155;
 
     border-radius: 9px;
 
     font-size: 11px;
 
     box-shadow:
-        0 2px 8px rgba(0,0,0,0.06);
+        0 2px 8px
+        rgba(0, 0, 0, 0.06);
 
     transition:
         background 0.4s ease,
-        color 0.4s ease;
+        color 0.4s ease,
+        box-shadow 0.4s ease;
 }
 
 .leyenda-item {
     display: flex;
+
     align-items: center;
+
     gap: 4px;
 }
 
 .color {
     width: 12px;
+
     height: 12px;
 
     border-radius: 3px;
@@ -184,9 +319,9 @@ header h3 {
 }
 
 
-/* =========================
-   CALENDARIO
-========================= */
+/* ==========================================
+   ZONA CALENDARIO
+========================================== */
 
 .zona-calendario {
     background: #ffffff;
@@ -196,7 +331,8 @@ header h3 {
     padding: 8px;
 
     box-shadow:
-        0 5px 20px rgba(0,0,0,0.07);
+        0 5px 20px
+        rgba(0, 0, 0, 0.07);
 
     transition:
         background 0.4s ease,
@@ -204,14 +340,15 @@ header h3 {
 }
 
 
-/* =========================
-   CONTROL MES
-========================= */
+/* ==========================================
+   CONTROL DEL MES
+========================================== */
 
 .mes-control {
     display: flex;
 
     justify-content: center;
+
     align-items: center;
 
     gap: 12px;
@@ -225,18 +362,29 @@ header h3 {
     text-align: center;
 
     font-size: 19px;
+
     font-weight: bold;
+
+    color: #1e293b;
+
+    transition:
+        color 0.4s ease;
 }
 
 .mes-control button {
     width: 30px;
+
     height: 30px;
 
     border: none;
+
     border-radius: 50%;
 
     background: #1e293b;
-    color: white;
+
+    color: #ffffff;
+
+    font-size: 13px;
 
     cursor: pointer;
 
@@ -247,13 +395,21 @@ header h3 {
 }
 
 .mes-control button:hover {
-    transform: scale(1.1);
+
+    transform:
+        scale(1.1);
+}
+
+.mes-control button:active {
+
+    transform:
+        scale(0.9);
 }
 
 
-/* =========================
-   DÍAS SEMANA
-========================= */
+/* ==========================================
+   DÍAS DE LA SEMANA
+========================================== */
 
 .dias-semana {
     display: grid;
@@ -267,22 +423,26 @@ header h3 {
 }
 
 .dias-semana div {
+
     text-align: center;
 
     font-size: 12px;
+
     font-weight: bold;
 
     color: #64748b;
 
-    transition: color 0.4s ease;
+    transition:
+        color 0.4s ease;
 }
 
 
-/* =========================
-   GRID CALENDARIO
-========================= */
+/* ==========================================
+   CALENDARIO
+========================================== */
 
 .calendario {
+
     display: grid;
 
     grid-template-columns:
@@ -299,18 +459,57 @@ header h3 {
 }
 
 
-/* =========================
-   CELDAS
-========================= */
+/* ==========================================
+   ANIMACIÓN CAMBIO DE MES
+========================================== */
+
+.calendario.cambiando {
+
+    animation:
+        cambioMes
+        0.35s
+        ease;
+}
+
+
+@keyframes cambioMes {
+
+    0% {
+
+        opacity: 0;
+
+        transform:
+            translateX(20px);
+    }
+
+    100% {
+
+        opacity: 1;
+
+        transform:
+            translateX(0);
+    }
+
+}
+
+
+/* ==========================================
+   CELDAS DEL CALENDARIO
+========================================== */
 
 .dia {
+
     min-height: 70px;
 
     padding: 5px;
 
     background: #ffffff;
 
-    border: 1px solid #e2e8f0;
+    color: #1e293b;
+
+    border:
+        1px solid
+        #e2e8f0;
 
     border-radius: 8px;
 
@@ -320,14 +519,22 @@ header h3 {
         background 0.4s ease,
         border-color 0.4s ease,
         color 0.4s ease,
-        transform 0.2s ease;
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
 }
 
 .dia:hover {
-    transform: translateY(-2px);
+
+    transform:
+        translateY(-2px);
+
+    box-shadow:
+        0 5px 12px
+        rgba(0, 0, 0, 0.08);
 }
 
 .dia > strong {
+
     display: block;
 
     font-size: 12px;
@@ -336,14 +543,16 @@ header h3 {
 }
 
 
-/* =========================
+/* ==========================================
    EVENTOS
-========================= */
+========================================== */
 
 .evento {
+
     margin-top: 3px;
 
-    padding: 4px 5px;
+    padding:
+        4px 5px;
 
     border-radius: 5px;
 
@@ -357,26 +566,40 @@ header h3 {
 
     transition:
         transform 0.15s ease,
-        box-shadow 0.15s ease;
+        box-shadow 0.15s ease,
+        filter 0.15s ease;
 }
 
 .evento:hover {
-    transform: translateX(2px) scale(1.02);
+
+    transform:
+        translateX(2px)
+        scale(1.02);
 
     box-shadow:
-        0 3px 7px rgba(0,0,0,0.15);
+        0 3px 7px
+        rgba(0, 0, 0, 0.15);
+}
+
+.evento:active {
+
+    transform:
+        scale(0.97);
 }
 
 .asignatura {
+
     font-size: 9px;
 
     text-transform: uppercase;
+
+    letter-spacing: 0.2px;
 }
 
 
-/* =========================
-   COLORES EVENTOS
-========================= */
+/* ==========================================
+   COLORES DE EVENTOS
+========================================== */
 
 .evento.E,
 .color.E {
@@ -404,35 +627,39 @@ header h3 {
 }
 
 
-/* =========================
-   ANIMACIÓN CAMBIO MES
-========================= */
+/* ==========================================
+   ANIMACIONES GENERALES
+========================================== */
 
-.calendario.cambiando {
-    animation: cambioMes 0.35s ease;
-}
-
-@keyframes cambioMes {
+@keyframes aparecer {
 
     from {
+
         opacity: 0;
-        transform: translateX(20px);
+
+        transform:
+            translateY(-8px);
     }
 
     to {
+
         opacity: 1;
-        transform: translateX(0);
+
+        transform:
+            translateY(0);
     }
 
 }
 
 
-/* =====================================================
-   🔥 MODO OSCURO
-===================================================== */
+/* ==========================================
+   MODO OSCURO
+========================================== */
 
 body.dark {
+
     background: #050505 !important;
+
     color: #eeeeee !important;
 }
 
@@ -440,40 +667,50 @@ body.dark {
 /* Cabecera */
 
 body.dark header h1 {
+
     color: #ffffff;
 }
 
 body.dark header h2 {
+
     color: #aaaaaa;
 }
 
 body.dark header h3 {
+
     color: #777777;
 }
 
 
-/* Botón luna/sol */
+/* Botón tema */
 
 body.dark .tema-btn {
+
     background: #222222 !important;
+
     color: #ffd43b !important;
 
     box-shadow:
-        0 3px 15px rgba(0,0,0,0.6);
+        0 3px 15px
+        rgba(0, 0, 0, 0.6);
 }
 
 
-/* Botones */
+/* Menú */
 
 body.dark .menu button {
+
     background: #202020 !important;
+
     color: #eeeeee !important;
 
     box-shadow:
-        0 2px 8px rgba(0,0,0,0.5);
+        0 2px 8px
+        rgba(0, 0, 0, 0.5);
 }
 
 body.dark .menu button:hover {
+
     background: #303030 !important;
 }
 
@@ -481,49 +718,59 @@ body.dark .menu button:hover {
 /* Leyenda */
 
 body.dark .leyenda {
+
     background: #111111 !important;
+
     color: #eeeeee !important;
 
     box-shadow:
-        0 3px 15px rgba(0,0,0,0.5);
+        0 3px 15px
+        rgba(0, 0, 0, 0.5);
 }
 
 
 /* Zona calendario */
 
 body.dark .zona-calendario {
+
     background: #101010 !important;
 
     box-shadow:
-        0 5px 25px rgba(0,0,0,0.7);
+        0 5px 25px
+        rgba(0, 0, 0, 0.7);
 }
 
 
 /* Mes */
 
 body.dark .mes-control span {
-    color: #ffffff;
+
+    color: #ffffff !important;
 }
 
 
-/* Botones mes */
+/* Botones del mes */
 
 body.dark .mes-control button {
+
     background: #eeeeee !important;
+
     color: #111111 !important;
 }
 
 
-/* Días semana */
+/* Días de la semana */
 
 body.dark .dias-semana div {
+
     color: #999999 !important;
 }
 
 
-/* Días */
+/* Celdas */
 
 body.dark .dia {
+
     background: #181818 !important;
 
     border-color: #303030 !important;
@@ -532,56 +779,144 @@ body.dark .dia {
 }
 
 body.dark .dia:hover {
+
     background: #202020 !important;
 
     border-color: #444444 !important;
 }
 
 
-/* Eventos mantienen sus colores */
+/* Los eventos mantienen sus colores */
 
 body.dark .evento {
+
     color: #111111 !important;
 }
 
 
-/* =========================
-   MÓVIL
-========================= */
+/* ==========================================
+   ERROR EN MODO OSCURO
+========================================== */
+
+body.dark .error-db {
+
+    background: #350b0b !important;
+
+    color: #ff4d4d !important;
+
+    border-color: #ff3333 !important;
+
+    box-shadow:
+        0 8px 30px
+        rgba(255, 0, 0, 0.3);
+}
+
+
+/* ==========================================
+   RESPONSIVE / MÓVIL
+========================================== */
 
 @media (max-width: 700px) {
 
     header h1 {
+
         font-size: 20px;
     }
 
     header h2 {
+
         font-size: 14px;
     }
 
+    header h3 {
+
+        font-size: 11px;
+    }
+
+
     .contenedor {
+
         width: 99%;
     }
 
+
+    .zona-calendario {
+
+        padding: 5px;
+    }
+
+
     .calendario {
+
         gap: 3px;
 
         grid-template-rows:
-            repeat(6, minmax(55px, auto));
+            repeat(
+                6,
+                minmax(55px, auto)
+            );
     }
+
 
     .dia {
+
         min-height: 55px;
+
         padding: 3px;
     }
+
 
     .evento {
+
         font-size: 8px;
+
         padding: 3px;
     }
 
+
     .asignatura {
+
         font-size: 7px;
+    }
+
+
+    .dias-semana {
+
+        gap: 3px;
+    }
+
+
+    .dias-semana div {
+
+        font-size: 10px;
+    }
+
+
+    .tema-btn {
+
+        width: 36px;
+
+        height: 36px;
+
+        top: 10px;
+
+        right: 10px;
+
+        font-size: 18px;
+    }
+
+
+    .error-db {
+
+        width: 92%;
+
+        margin:
+            60px auto;
+
+        padding:
+            25px 15px;
+
+        font-size: 21px;
     }
 
 }
