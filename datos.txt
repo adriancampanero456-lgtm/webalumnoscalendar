@@ -20,6 +20,3 @@
 9,12,E,Inglés,Global Test Term 1 (Unit 1, 2)
 14,12,O,Valenciano,Exposicions orals - Iñaki - Joel E. - Julen - Joel P. - Andrés - Zixu - Víctor - Miguel - Santiago - Guillermo
 
-15,6,E,Biología,Global Biología
-16,6,E,Castellano,Don Juan Tenorio
-18,6,E,Matemáticas,Global Mates
