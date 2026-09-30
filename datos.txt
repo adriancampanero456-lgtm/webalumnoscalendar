@@ -1,7 +1,25 @@
+21,10,E,Inglés,Unit 1 Test
+21,10,E,Inglés,Speaking Unit 1
+22,10,T,Inglés,Writing Unit 1 Deadline
 
+19,10,E,Valenciano,Prova 1
+16,10,T,Valenciano,Últim dia entrega treball expressió escrita
 
-15,6,E,Global Biología
-16,6,E,Don Juan Tenorio
+12,11,E,Inglés,Speaking Unit 2 (In Class)
+16,11,T,Inglés,Writing Unit 2 Deadline
+18,11,E,Inglés,Unit 2 Test
+19,11,R,Inglés,Bring Reading Book Term 1 - Dr Jekyll and Mr Hyde - Robert Louis Stevenson (Burlington)
 
-18,6,E,Global Mates
+21,11,C, Adrián Soriano
+30,11,E,Inglés,Reading Book Test
 
+30,11,O,Valenciano,Exposicions orals - Hugo - Martina - Iratxe - Nicolás - Sebastián - Joel M. - Blai - Nuria - Tatiana
+
+4,12,E,Valenciano,Prova llibre lectura
+7,12,O,Valenciano,Exposicions orals - Zlata - Nur - Nerea - Mizar - Pilar - Sara - Assil - Adrián - Ashley
+9,12,E,Inglés,Global Test Term 1 (Unit 1, 2)
+14,12,O,Valenciano,Exposicions orals - Iñaki - Joel E. - Julen - Joel P. - Andrés - Zixu - Víctor - Miguel - Santiago - Guillermo
+
+15,6,E,Biología,Global Biología
+16,6,E,Castellano,Don Juan Tenorio
+18,6,E,Matemáticas,Global Mates
