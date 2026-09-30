@@ -822,45 +822,64 @@ function filtrar(
    CAMBIAR MES
 ================================================= */
 
-function cambiarMes(
-    direccion
-) {
+function cambiarMes(direccion) {
 
-    mesActual += direccion;
+    let nuevoMes = mesActual + direccion;
+    let nuevoAño = añoActual;
 
 
-    /*
-        Diciembre → Enero
-    */
+    // Pasar de diciembre a enero
+    if (nuevoMes > 12) {
+        nuevoMes = 1;
+        nuevoAño++;
+    }
 
-    if (
-        mesActual > 12
-    ) {
 
-        mesActual = 1;
-
-        añoActual++;
-
+    // Pasar de enero a diciembre
+    if (nuevoMes < 1) {
+        nuevoMes = 12;
+        nuevoAño--;
     }
 
 
     /*
-        Enero → Diciembre
+        Límite inferior:
+        Septiembre de 2026
     */
 
     if (
-        mesActual < 1
+        nuevoAño < 2026 ||
+        (
+            nuevoAño === 2026 &&
+            nuevoMes < 9
+        )
     ) {
-
-        mesActual = 12;
-
-        añoActual--;
-
+        return;
     }
+
+
+    /*
+        Límite superior:
+        Junio de 2027
+    */
+
+    if (
+        nuevoAño > 2027 ||
+        (
+            nuevoAño === 2027 &&
+            nuevoMes > 6
+        )
+    ) {
+        return;
+    }
+
+
+    // Aplicar nuevo mes
+    mesActual = nuevoMes;
+    añoActual = nuevoAño;
 
 
     actualizarVista();
-
 }
 
 
