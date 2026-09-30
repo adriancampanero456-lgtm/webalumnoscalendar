@@ -260,39 +260,23 @@ function actualizarVista() {
    GENERAR CALENDARIO
 ========================================== */
 
-function generarCalendario(
-    mes,
-    año
-) {
+function generarCalendario(mes, año) {
 
-    const calendario =
-        document.getElementById(
-            "calendario"
-        );
+    const calendario = document.getElementById("calendario");
 
+    /* Animación */
+    calendario.classList.remove("cambiando");
+    void calendario.offsetWidth;
+    calendario.classList.add("cambiando");
 
     calendario.innerHTML = "";
 
-
-    const diasMes =
-        new Date(
-            año,
-            mes,
-            0
-        ).getDate();
-
-
-    let primerDia =
-        new Date(
-            año,
-            mes - 1,
-            1
-        ).getDay();
-
+    const diasMes = new Date(año, mes, 0).getDate();
 
     /*
-        JavaScript:
+        Día de la semana del día 1.
 
+        JavaScript:
         Domingo = 0
         Lunes = 1
         Martes = 2
@@ -300,259 +284,176 @@ function generarCalendario(
         Jueves = 4
         Viernes = 5
         Sábado = 6
-
-        Nuestro calendario comienza en lunes.
     */
 
-    primerDia =
-        primerDia === 0
-            ? 6
-            : primerDia - 1;
-
-
-    let diaActual = 1;
-
+    let primerDia = new Date(año, mes - 1, 1).getDay();
 
     /*
-        6 semanas como máximo.
+        Convertimos a:
+        Lunes = 0
+        Martes = 1
+        Miércoles = 2
+        Jueves = 3
+        Viernes = 4
     */
 
-    for (
-        let semana = 0;
-        semana < 6;
-        semana++
-    ) {
+    if (primerDia === 0) {
+        primerDia = 6;
+    } else {
+        primerDia = primerDia - 1;
+    }
+
+    /*
+        Como solo mostramos lunes-viernes,
+        si el día 1 cae en sábado o domingo,
+        el primer día visible será el lunes siguiente.
+    */
+
+    if (primerDia > 4) {
+        primerDia = 0;
+    }
+
+    /*
+        Crear exactamente 30 celdas:
+        6 semanas × 5 días
+    */
+
+    for (let i = 0; i < 30; i++) {
+
+        const celda = document.createElement("div");
+
+        celda.classList.add("dia");
+
+        /*
+            Calcular qué día corresponde
+        */
+
+        const posicion = i;
+
+        let diaNumero;
+
+        if (posicion < primerDia) {
+
+            /*
+                Espacios antes del día 1
+            */
+
+            calendario.appendChild(celda);
+            continue;
+
+        } else {
+
+            diaNumero =
+                posicion - primerDia + 1;
+
+        }
+
+        /*
+            Si ya hemos pasado el último día
+        */
+
+        if (diaNumero > diasMes) {
+
+            calendario.appendChild(celda);
+            continue;
+
+        }
+
+        /*
+            Número del día
+        */
+
+        const numero =
+            document.createElement("strong");
+
+        numero.textContent =
+            diaNumero;
+
+        celda.appendChild(numero);
 
 
         /*
-            Solo mostramos lunes-viernes.
+            Eventos del día
         */
 
-        for (
-            let diaSemana = 0;
-            diaSemana < 5;
-            diaSemana++
-        ) {
+        const eventosDia =
+            eventos.filter(e =>
 
+                Number(e.dia) === diaNumero &&
+                Number(e.mes) === mes
 
-            const celda =
-                document.createElement(
-                    "div"
-                );
-
-
-            /*
-                Espacios antes del primer día.
-            */
-
-            if (
-                semana === 0 &&
-                diaSemana < primerDia
-            ) {
-
-                calendario.appendChild(
-                    celda
-                );
-
-                continue;
-
-            }
-
-
-            /*
-                Si hemos llegado al final
-                del mes.
-            */
-
-            if (
-                diaActual > diasMes
-            ) {
-
-                calendario.appendChild(
-                    celda
-                );
-
-                continue;
-
-            }
-
-
-            celda.classList.add(
-                "dia"
             );
 
 
-            /*
-                Número del día.
-            */
+        eventosDia.forEach(e => {
 
-            const numero =
-                document.createElement(
-                    "strong"
+            if (
+                filtroActual !== "ALL" &&
+                filtroActual !== e.categoria
+            ) {
+                return;
+            }
+
+
+            const eventoDiv =
+                document.createElement("div");
+
+            eventoDiv.classList.add(
+                "evento",
+                e.categoria
+            );
+
+
+            const asignatura =
+                document.createElement("strong");
+
+            asignatura.classList.add(
+                "asignatura"
+            );
+
+            asignatura.textContent =
+                e.asignatura;
+
+
+            const descripcion =
+                document.createElement("span");
+
+            descripcion.textContent =
+                e.descripcion;
+
+
+            eventoDiv.appendChild(
+                asignatura
+            );
+
+            eventoDiv.appendChild(
+                document.createElement("br")
+            );
+
+            eventoDiv.appendChild(
+                descripcion
+            );
+
+
+            eventoDiv.onclick = () => {
+
+                alert(
+                    e.asignatura +
+                    "\n\n" +
+                    e.descripcion
                 );
 
-
-            numero.textContent =
-                diaActual;
+            };
 
 
             celda.appendChild(
-                numero
+                eventoDiv
             );
 
-
-            /*
-                Buscar eventos del día.
-            */
-
-            const eventosDia =
-                eventos.filter(e =>
-
-                    Number(e.dia) === diaActual &&
-                    Number(e.mes) === mes
-
-                );
+        });
 
 
-            /*
-                Mostrar eventos.
-            */
-
-            eventosDia.forEach(e => {
-
-
-                /*
-                    Aplicar filtro.
-                */
-
-                if (
-                    filtroActual !== "ALL" &&
-                    filtroActual !== e.categoria
-                ) {
-
-                    return;
-
-                }
-
-
-                const eventoDiv =
-                    document.createElement(
-                        "div"
-                    );
-
-
-                /*
-                    Clase del evento:
-
-                    evento E
-                    evento T
-                    evento R
-                    evento O
-                    evento C
-                */
-
-                eventoDiv.classList.add(
-                    "evento",
-                    e.categoria
-                );
-
-
-                /*
-                    ASIGNATURA
-                */
-
-                const asignatura =
-                    document.createElement(
-                        "strong"
-                    );
-
-
-                asignatura.classList.add(
-                    "asignatura"
-                );
-
-
-                asignatura.textContent =
-                    e.asignatura;
-
-
-                /*
-                    DESCRIPCIÓN
-                */
-
-                const descripcion =
-                    document.createElement(
-                        "span"
-                    );
-
-
-                descripcion.textContent =
-                    e.descripcion;
-
-
-                eventoDiv.appendChild(
-                    asignatura
-                );
-
-
-                eventoDiv.appendChild(
-                    document.createElement(
-                        "br"
-                    )
-                );
-
-
-                eventoDiv.appendChild(
-                    descripcion
-                );
-
-
-                /*
-                    Mostrar información al hacer clic.
-                */
-
-                eventoDiv.onclick = () => {
-
-                    alert(
-
-                        e.asignatura +
-                        "\n\n" +
-                        e.descripcion
-
-                    );
-
-                };
-
-
-                celda.appendChild(
-                    eventoDiv
-                );
-
-            });
-
-
-            calendario.appendChild(
-                celda
-            );
-
-
-            diaActual++;
-
-        }
-
-
-        /*
-            No seguir creando semanas
-            si ya terminó el mes.
-        */
-
-        if (
-            diaActual > diasMes
-        ) {
-
-            break;
-
-        }
+        calendario.appendChild(celda);
 
     }
 
