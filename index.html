@@ -1,138 +1,150 @@
 <!DOCTYPE html>
-
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-```
-<title>Calendario - 4º ESO 2026-2027</title>
+    <title>Calendario - 4º ESO 2026-2027</title>
 
-<link rel="stylesheet" href="estilos.css">
-```
-
+    <link rel="stylesheet" href="estilos.css">
 </head>
 
 <body>
 
 <header>
-    <h1>Calendario - 4º ESO - Curso 2026-2027</h1>
-    <h2 id="hoy"></h2>
+
+    <h1>Calendario - 4º ESO</h1>
+    <h2>Curso 2026-2027</h2>
+    <h3 id="hoy"></h3>
+
+    <button id="temaBtn" class="tema-btn" onclick="cambiarTema()">
+        🌙
+    </button>
+
 </header>
+
 
 <div class="contenedor">
 
-```
-<!-- MENÚ DE FILTROS -->
-<div class="menu">
+    <!-- FILTROS -->
+    <div class="menu">
 
-    <button id="btnALL" onclick="filtrar('ALL')">
-        Todos
-    </button>
-
-    <button onclick="filtrar('E')">
-        Exámenes
-    </button>
-
-    <button onclick="filtrar('T')">
-        Trabajos
-    </button>
-
-    <button onclick="filtrar('R')">
-        Lecturas
-    </button>
-
-    <button onclick="filtrar('O')">
-        Exposiciones
-    </button>
-
-    <button onclick="filtrar('C')">
-        Cumpleaños
-    </button>
-
-</div>
-
-
-<!-- LEYENDA DE COLORES -->
-<div class="leyenda">
-
-    <strong>Leyenda:</strong>
-
-    <div class="leyenda-item">
-        <span class="color E"></span>
-        Exámenes
-    </div>
-
-    <div class="leyenda-item">
-        <span class="color T"></span>
-        Trabajos
-    </div>
-
-    <div class="leyenda-item">
-        <span class="color R"></span>
-        Lecturas
-    </div>
-
-    <div class="leyenda-item">
-        <span class="color O"></span>
-        Exposiciones
-    </div>
-
-    <div class="leyenda-item">
-        <span class="color C"></span>
-        Cumpleaños
-    </div>
-
-</div>
-
-
-<!-- CALENDARIO -->
-<div class="zona-calendario">
-
-    <div class="mes-control">
-
-        <button onclick="cambiarMes(-1)">
-            ⬅
+        <button onclick="filtrar('ALL')">
+            Todos
         </button>
 
-        <span id="mesActual"></span>
+        <button onclick="filtrar('E')">
+            Exámenes
+        </button>
 
-        <button onclick="cambiarMes(1)">
-            ➡
+        <button onclick="filtrar('T')">
+            Trabajos
+        </button>
+
+        <button onclick="filtrar('R')">
+            Lecturas
+        </button>
+
+        <button onclick="filtrar('O')">
+            Exposiciones
+        </button>
+
+        <button onclick="filtrar('C')">
+            Cumpleaños
         </button>
 
     </div>
 
 
-    <!-- DÍAS DE LA SEMANA -->
-    <div class="dias-semana">
+    <!-- LEYENDA -->
+    <div class="leyenda">
 
-        <div>L</div>
-        <div>M</div>
-        <div>X</div>
-        <div>J</div>
-        <div>V</div>
+        <strong>Leyenda:</strong>
+
+        <div class="leyenda-item">
+            <span class="color E"></span>
+            Exámenes
+        </div>
+
+        <div class="leyenda-item">
+            <span class="color T"></span>
+            Trabajos
+        </div>
+
+        <div class="leyenda-item">
+            <span class="color R"></span>
+            Lecturas
+        </div>
+
+        <div class="leyenda-item">
+            <span class="color O"></span>
+            Exposiciones
+        </div>
+
+        <div class="leyenda-item">
+            <span class="color C"></span>
+            Cumpleaños
+        </div>
 
     </div>
 
 
-    <!-- DÍAS -->
-    <div class="calendario" id="calendario"></div>
+    <!-- CALENDARIO -->
+    <div class="zona-calendario">
+
+        <div class="mes-control">
+
+            <button onclick="cambiarMes(-1)">
+                ⬅
+            </button>
+
+            <span id="mesActual"></span>
+
+            <button onclick="cambiarMes(1)">
+                ➡
+            </button>
+
+        </div>
+
+
+        <!-- DÍAS DE LA SEMANA -->
+        <div class="dias-semana">
+
+            <div>L</div>
+            <div>M</div>
+            <div>X</div>
+            <div>J</div>
+            <div>V</div>
+            <div>S</div>
+            <div>D</div>
+
+        </div>
+
+
+        <!-- DÍAS DEL MES -->
+        <div
+            class="calendario"
+            id="calendario">
+        </div>
+
+    </div>
 
 </div>
-```
 
-</div>
 
 <script>
 
-let eventos = [];
+/* ==========================================
+   VARIABLES
+========================================== */
 
+let eventos = [];
 let filtroActual = "ALL";
 
 
 /* ==========================================
-   CURSO 2026-2027
+   FECHA
 ========================================== */
 
 let fechaActual = new Date();
@@ -145,7 +157,6 @@ let añoActual =
 
 
 const nombresMeses = [
-
     "Enero",
     "Febrero",
     "Marzo",
@@ -158,7 +169,6 @@ const nombresMeses = [
     "Octubre",
     "Noviembre",
     "Diciembre"
-
 ];
 
 
@@ -175,12 +185,15 @@ fetch("datos.txt")
         const lineas = texto
             .trim()
             .split("\n")
-            .filter(linea => linea.trim() !== "");
+            .filter(linea =>
+                linea.trim() !== ""
+            );
 
 
         eventos = lineas.map(linea => {
 
-            const partes = linea.split(",");
+            const partes =
+                linea.split(",");
 
 
             const dia =
@@ -197,8 +210,7 @@ fetch("datos.txt")
 
 
             /*
-                La descripción puede contener comas,
-                por eso cogemos todo lo que queda.
+                La descripción puede contener comas.
             */
 
             const descripcion =
@@ -209,13 +221,11 @@ fetch("datos.txt")
 
 
             return {
-
-                dia: dia,
-                mes: mes,
-                categoria: categoria,
-                asignatura: asignatura,
-                descripcion: descripcion
-
+                dia,
+                mes,
+                categoria,
+                asignatura,
+                descripcion
             };
 
         });
@@ -244,7 +254,6 @@ function actualizarVista() {
     document.getElementById(
         "mesActual"
     ).textContent =
-
         `${nombresMeses[mesActual - 1]} ${añoActual}`;
 
 
@@ -262,27 +271,44 @@ function actualizarVista() {
 
 function generarCalendario(mes, año) {
 
-    const calendario = document.getElementById("calendario");
+    const calendario =
+        document.getElementById(
+            "calendario"
+        );
 
-    // Animación suave al cambiar de mes
-    calendario.classList.remove("cambiando");
+
+    /*
+        Animación de cambio de mes
+    */
+
+    calendario.classList.remove(
+        "cambiando"
+    );
+
     void calendario.offsetWidth;
-    calendario.classList.add("cambiando");
+
+    calendario.classList.add(
+        "cambiando"
+    );
+
 
     calendario.innerHTML = "";
 
-    const diasMes = new Date(año, mes, 0).getDate();
 
     /*
-        Recorremos todos los días reales del mes.
-        Solo mostramos lunes, martes, miércoles,
-        jueves y viernes.
+        Número de días del mes
     */
 
-    let primerDiaSemana = new Date(año, mes - 1, 1).getDay();
+    const diasMes =
+        new Date(
+            año,
+            mes,
+            0
+        ).getDate();
+
 
     /*
-        Convertimos:
+        Día de la semana del día 1.
 
         Domingo = 0
         Lunes = 1
@@ -291,227 +317,220 @@ function generarCalendario(mes, año) {
         Jueves = 4
         Viernes = 5
         Sábado = 6
-
-        a:
-
-        Lunes = 0
-        Martes = 1
-        Miércoles = 2
-        Jueves = 3
-        Viernes = 4
-        Sábado = 5
-        Domingo = 6
     */
 
-    primerDiaSemana =
-        primerDiaSemana === 0
-            ? 6
-            : primerDiaSemana - 1;
+    let primerDia =
+        new Date(
+            año,
+            mes - 1,
+            1
+        ).getDay();
 
 
     /*
-        Creamos 6 semanas × 5 días
+        Convertimos para empezar
+        por lunes:
+
+        Lunes = 0
+        Martes = 1
+        ...
+        Domingo = 6
     */
 
-    for (let semana = 0; semana < 6; semana++) {
+    primerDia =
+        primerDia === 0
+            ? 6
+            : primerDia - 1;
 
-        for (let columna = 0; columna < 5; columna++) {
 
-            const celda = document.createElement("div");
+    /*
+        6 semanas × 7 días
+    */
 
-            celda.classList.add("dia");
+    for (
+        let posicion = 0;
+        posicion < 42;
+        posicion++
+    ) {
 
 
-            /*
-                Posición real dentro del mes.
+        const celda =
+            document.createElement(
+                "div"
+            );
 
-                Ejemplo:
 
-                Si el día 1 es miércoles:
+        celda.classList.add(
+            "dia"
+        );
 
-                lunes    martes    miércoles
-                  1          2          3
-            */
 
-            const posicion =
-                semana * 7 +
-                columna -
-                primerDiaSemana;
+        /*
+            Calcular número del día
+        */
 
+        const diaNumero =
+            posicion -
+            primerDia +
+            1;
 
-            const diaNumero =
-                posicion + 1;
 
+        /*
+            Celdas vacías
+        */
 
-            /*
-                Si no existe ese día,
-                dejamos la celda vacía.
-            */
+        if (
+            diaNumero < 1 ||
+            diaNumero > diasMes
+        ) {
 
-            if (
-                diaNumero < 1 ||
-                diaNumero > diasMes
-            ) {
+            calendario.appendChild(
+                celda
+            );
 
-                calendario.appendChild(celda);
-
-                continue;
-
-            }
-
-
-            /*
-                Comprobar el día real.
-            */
-
-            const fecha =
-                new Date(
-                    año,
-                    mes - 1,
-                    diaNumero
-                );
-
-
-            const diaSemana =
-                fecha.getDay();
-
-
-            /*
-                Domingo = 0
-                Sábado = 6
-
-                Si es fin de semana,
-                no debería aparecer.
-            */
-
-            if (
-                diaSemana === 0 ||
-                diaSemana === 6
-            ) {
-
-                calendario.appendChild(celda);
-
-                continue;
-
-            }
-
-
-            /*
-                Número del día
-            */
-
-            const numero =
-                document.createElement("strong");
-
-            numero.textContent =
-                diaNumero;
-
-            celda.appendChild(numero);
-
-
-            /*
-                Buscar eventos
-            */
-
-            const eventosDia =
-                eventos.filter(e =>
-
-                    Number(e.dia) === diaNumero &&
-                    Number(e.mes) === mes
-
-                );
-
-
-            /*
-                Mostrar eventos
-            */
-
-            eventosDia.forEach(e => {
-
-                if (
-                    filtroActual !== "ALL" &&
-                    filtroActual !== e.categoria
-                ) {
-
-                    return;
-
-                }
-
-
-                const eventoDiv =
-                    document.createElement("div");
-
-
-                eventoDiv.classList.add(
-                    "evento",
-                    e.categoria
-                );
-
-
-                /*
-                    ASIGNATURA
-                */
-
-                const asignatura =
-                    document.createElement("strong");
-
-                asignatura.classList.add(
-                    "asignatura"
-                );
-
-                asignatura.textContent =
-                    e.asignatura;
-
-
-                /*
-                    DESCRIPCIÓN
-                */
-
-                const descripcion =
-                    document.createElement("span");
-
-                descripcion.textContent =
-                    e.descripcion;
-
-
-                eventoDiv.appendChild(
-                    asignatura
-                );
-
-                eventoDiv.appendChild(
-                    document.createElement("br")
-                );
-
-                eventoDiv.appendChild(
-                    descripcion
-                );
-
-
-                /*
-                    Al hacer clic
-                */
-
-                eventoDiv.onclick = () => {
-
-                    alert(
-                        e.asignatura +
-                        "\n\n" +
-                        e.descripcion
-                    );
-
-                };
-
-
-                celda.appendChild(
-                    eventoDiv
-                );
-
-            });
-
-
-            calendario.appendChild(celda);
+            continue;
 
         }
+
+
+        /*
+            Número del día
+        */
+
+        const numero =
+            document.createElement(
+                "strong"
+            );
+
+        numero.textContent =
+            diaNumero;
+
+
+        celda.appendChild(
+            numero
+        );
+
+
+        /*
+            Eventos de ese día
+        */
+
+        const eventosDia =
+            eventos.filter(e =>
+
+                Number(e.dia) ===
+                    diaNumero &&
+
+                Number(e.mes) ===
+                    mes
+
+            );
+
+
+        eventosDia.forEach(e => {
+
+
+            /*
+                Aplicar filtro
+            */
+
+            if (
+                filtroActual !== "ALL" &&
+                filtroActual !== e.categoria
+            ) {
+
+                return;
+
+            }
+
+
+            const eventoDiv =
+                document.createElement(
+                    "div"
+                );
+
+
+            eventoDiv.classList.add(
+                "evento",
+                e.categoria
+            );
+
+
+            /*
+                Asignatura
+            */
+
+            const asignatura =
+                document.createElement(
+                    "strong"
+                );
+
+
+            asignatura.classList.add(
+                "asignatura"
+            );
+
+
+            asignatura.textContent =
+                e.asignatura;
+
+
+            /*
+                Descripción
+            */
+
+            const descripcion =
+                document.createElement(
+                    "span"
+                );
+
+
+            descripcion.textContent =
+                e.descripcion;
+
+
+            eventoDiv.appendChild(
+                asignatura
+            );
+
+
+            eventoDiv.appendChild(
+                document.createElement(
+                    "br"
+                )
+            );
+
+
+            eventoDiv.appendChild(
+                descripcion
+            );
+
+
+            /*
+                Ventana al pulsar
+            */
+
+            eventoDiv.onclick = () => {
+
+                alert(
+                    e.asignatura +
+                    "\n\n" +
+                    e.descripcion
+                );
+
+            };
+
+
+            celda.appendChild(
+                eventoDiv
+            );
+
+        });
+
+
+        calendario.appendChild(
+            celda
+        );
 
     }
 
@@ -541,31 +560,17 @@ function cambiarMes(direccion) {
     mesActual += direccion;
 
 
-    /*
-        Diciembre → Enero
-    */
-
-    if (
-        mesActual > 12
-    ) {
+    if (mesActual > 12) {
 
         mesActual = 1;
-
         añoActual++;
 
     }
 
 
-    /*
-        Enero → Diciembre
-    */
-
-    if (
-        mesActual < 1
-    ) {
+    if (mesActual < 1) {
 
         mesActual = 12;
-
         añoActual--;
 
     }
@@ -577,7 +582,7 @@ function cambiarMes(direccion) {
 
 
 /* ==========================================
-   MOSTRAR FECHA DE HOY
+   FECHA DE HOY
 ========================================== */
 
 function mostrarDiaHoy() {
@@ -587,7 +592,6 @@ function mostrarDiaHoy() {
 
 
     const dias = [
-
         "domingo",
         "lunes",
         "martes",
@@ -595,12 +599,10 @@ function mostrarDiaHoy() {
         "jueves",
         "viernes",
         "sábado"
-
     ];
 
 
     const meses = [
-
         "enero",
         "febrero",
         "marzo",
@@ -613,7 +615,6 @@ function mostrarDiaHoy() {
         "octubre",
         "noviembre",
         "diciembre"
-
     ];
 
 
@@ -630,6 +631,88 @@ function mostrarDiaHoy() {
 
 
 mostrarDiaHoy();
+
+
+/* ==========================================
+   MODO OSCURO
+========================================== */
+
+function cambiarTema() {
+
+    document.body.classList.toggle(
+        "dark"
+    );
+
+
+    const boton =
+        document.getElementById(
+            "temaBtn"
+        );
+
+
+    if (
+        document.body.classList.contains(
+            "dark"
+        )
+    ) {
+
+        boton.textContent = "☀️";
+
+        localStorage.setItem(
+            "tema",
+            "dark"
+        );
+
+    } else {
+
+        boton.textContent = "🌙";
+
+        localStorage.setItem(
+            "tema",
+            "light"
+        );
+
+    }
+
+}
+
+
+/* ==========================================
+   CARGAR TEMA GUARDADO
+========================================== */
+
+function cargarTema() {
+
+    const tema =
+        localStorage.getItem(
+            "tema"
+        );
+
+
+    const boton =
+        document.getElementById(
+            "temaBtn"
+        );
+
+
+    if (tema === "dark") {
+
+        document.body.classList.add(
+            "dark"
+        );
+
+        boton.textContent = "☀️";
+
+    } else {
+
+        boton.textContent = "🌙";
+
+    }
+
+}
+
+
+cargarTema();
 
 </script>
 
