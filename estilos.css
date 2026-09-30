@@ -1,127 +1,446 @@
-body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    background: #f4f4f4;
+/* ================================
+   CONFIGURACIÓN GENERAL
+================================ */
+
+* {
+    box-sizing: border-box;
 }
+
+body {
+    margin: 0;
+    font-family: Arial, Helvetica, sans-serif;
+    background: linear-gradient(135deg, #eef2ff, #f8fafc);
+    color: #1e293b;
+    min-height: 100vh;
+}
+
+
+/* ================================
+   CABECERA
+================================ */
 
 header {
-    background: #222;
-    color: white;
-    padding: 15px;
     text-align: center;
+    padding: 30px 20px 20px;
+    animation: aparecer 0.7s ease;
 }
+
+header h1 {
+    margin: 0;
+    font-size: 32px;
+    font-weight: 700;
+}
+
+header h2 {
+    margin: 8px 0;
+    font-size: 20px;
+    font-weight: 500;
+    color: #64748b;
+}
+
+header h3 {
+    margin: 10px 0 0;
+    font-size: 15px;
+    color: #94a3b8;
+}
+
+
+/* ================================
+   CONTENEDOR
+================================ */
 
 .contenedor {
-    display: flex;
+    width: 95%;
+    max-width: 1300px;
+    margin: auto;
+    padding-bottom: 40px;
 }
 
-/* MENÚ */
+
+/* ================================
+   MENÚ
+================================ */
+
 .menu {
-    width: 200px;
-    background: #333;
-    padding: 10px;
     display: flex;
-    flex-direction: column;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin: 15px 0;
+    animation: aparecer 0.8s ease;
 }
 
 .menu button {
-    margin: 5px 0;
-    padding: 10px;
     border: none;
-    background: #555;
-    color: white;
+    padding: 11px 18px;
+    border-radius: 10px;
+    background: white;
+    color: #334155;
+    font-size: 14px;
+    font-weight: 600;
     cursor: pointer;
+
+    box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease,
+        background 0.2s ease;
 }
 
 .menu button:hover {
-    background: #777;
+    transform: translateY(-3px);
+    box-shadow: 0 7px 18px rgba(0,0,0,0.12);
+    background: #f1f5f9;
 }
 
-/* CALENDARIO */
-.calendario {
-    flex: 1;
-    display: grid;
-    grid-template-columns: repeat(7, 1fr);
-    gap: 10px;
-    padding: 10px;
+.menu button:active {
+    transform: scale(0.95);
 }
 
-.dia {
-    background: white;
-    padding: 10px;
-    min-height: 80px;
-    border-radius: 8px;
-    box-shadow: 0 0 5px rgba(0,0,0,0.1);
+
+/* ================================
+   LEYENDA
+================================ */
+
+.leyenda {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 15px;
+
+    margin: 15px auto;
+    padding: 12px 18px;
+
+    background: rgba(255,255,255,0.8);
+    backdrop-filter: blur(10px);
+
+    border-radius: 14px;
+
+    box-shadow: 0 4px 15px rgba(0,0,0,0.07);
+
+    animation: aparecer 0.9s ease;
 }
 
-/* EVENTOS */
-.evento {
-    margin-top: 5px;
-    padding: 3px;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 12px;
+.leyenda-item {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    font-size: 14px;
 }
 
-/* COLORES */
-.E { background: red; color: white; }
-.T { background: orange; }
-.C { background: green; color: white; }
+.color {
+    width: 16px;
+    height: 16px;
+    border-radius: 5px;
+    display: inline-block;
+}
+
+
+/* ================================
+   ZONA CALENDARIO
+================================ */
 
 .zona-calendario {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
+    background: rgba(255,255,255,0.85);
+    backdrop-filter: blur(12px);
+
+    border-radius: 18px;
+    padding: 20px;
+
+    box-shadow:
+        0 10px 35px rgba(0,0,0,0.08);
+
+    animation: subir 0.8s ease;
 }
 
-/* CONTROL DE MES */
+
+/* ================================
+   CONTROL DEL MES
+================================ */
+
 .mes-control {
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 20px;
-    padding: 10px;
-    font-size: 20px;
-    font-weight: bold;
+    gap: 25px;
+
+    margin-bottom: 20px;
+}
+
+.mes-control span {
+    min-width: 200px;
+    text-align: center;
+
+    font-size: 25px;
+    font-weight: 700;
 }
 
 .mes-control button {
-    padding: 8px 12px;
-    font-size: 16px;
+    width: 42px;
+    height: 42px;
+
+    border: none;
+    border-radius: 50%;
+
+    background: #1e293b;
+    color: white;
+
+    font-size: 18px;
+
     cursor: pointer;
+
+    transition:
+        transform 0.2s ease,
+        background 0.2s ease,
+        box-shadow 0.2s ease;
 }
 
-/* ZONA DERECHA */
-.zona-calendario {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
+.mes-control button:hover {
+    transform: scale(1.1);
+    background: #334155;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
 }
 
-/* CONTROL MES */
-.mes-control {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 20px;
-    padding: 10px;
-    font-size: 20px;
-    font-weight: bold;
+.mes-control button:active {
+    transform: scale(0.9);
 }
 
-/* DÍAS SEMANA */
+
+/* ================================
+   DÍAS DE LA SEMANA
+================================ */
+
 .dias-semana {
     display: grid;
     grid-template-columns: repeat(5, 1fr);
-    text-align: center;
-    font-weight: bold;
-    padding: 5px;
+    gap: 8px;
+    margin-bottom: 8px;
 }
 
-/* CALENDARIO */
+.dias-semana div {
+    text-align: center;
+    font-weight: 700;
+    color: #64748b;
+    padding: 10px;
+}
+
+
+/* ================================
+   CALENDARIO
+================================ */
+
 .calendario {
     display: grid;
     grid-template-columns: repeat(5, 1fr);
-    gap: 10px;
+    gap: 8px;
+}
+
+
+/* ================================
+   CELDAS
+================================ */
+
+.dia {
+    min-height: 130px;
+
+    background: #ffffff;
+
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+
     padding: 10px;
+
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease,
+        border-color 0.2s ease;
+
+    animation: celdaAparecer 0.35s ease backwards;
+}
+
+.dia:hover {
+    transform: translateY(-3px);
+
+    border-color: #cbd5e1;
+
+    box-shadow:
+        0 8px 20px rgba(0,0,0,0.08);
+}
+
+.dia > strong {
+    display: block;
+    margin-bottom: 7px;
+    font-size: 16px;
+}
+
+
+/* ================================
+   EVENTOS
+================================ */
+
+.evento {
+    margin-top: 6px;
+
+    padding: 7px 8px;
+
+    border-radius: 8px;
+
+    color: #172033;
+
+    font-size: 12px;
+
+    cursor: pointer;
+
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease,
+        filter 0.2s ease;
+
+    animation: eventoAparecer 0.3s ease;
+}
+
+.evento:hover {
+    transform: translateX(3px) scale(1.02);
+
+    filter: brightness(0.97);
+
+    box-shadow:
+        0 4px 10px rgba(0,0,0,0.12);
+}
+
+.evento:active {
+    transform: scale(0.97);
+}
+
+.asignatura {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+}
+
+
+/* ================================
+   COLORES
+================================ */
+
+.evento.E,
+.color.E {
+    background: #ffb4b4;
+}
+
+.evento.T,
+.color.T {
+    background: #a9d8ff;
+}
+
+.evento.R,
+.color.R {
+    background: #b5e7c1;
+}
+
+.evento.O,
+.color.O {
+    background: #e2b7f0;
+}
+
+.evento.C,
+.color.C {
+    background: #ffe28a;
+}
+
+
+/* ================================
+   ANIMACIONES
+================================ */
+
+@keyframes aparecer {
+
+    from {
+        opacity: 0;
+        transform: translateY(15px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+}
+
+
+@keyframes subir {
+
+    from {
+        opacity: 0;
+        transform: translateY(25px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+}
+
+
+@keyframes celdaAparecer {
+
+    from {
+        opacity: 0;
+        transform: scale(0.95);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+
+}
+
+
+@keyframes eventoAparecer {
+
+    from {
+        opacity: 0;
+        transform: translateX(-5px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+
+}
+
+
+/* ================================
+   MÓVIL
+================================ */
+
+@media (max-width: 700px) {
+
+    header h1 {
+        font-size: 24px;
+    }
+
+    .zona-calendario {
+        padding: 10px;
+    }
+
+    .dia {
+        min-height: 100px;
+        padding: 7px;
+    }
+
+    .evento {
+        font-size: 10px;
+    }
+
+    .mes-control span {
+        font-size: 20px;
+        min-width: 150px;
+    }
+
 }
