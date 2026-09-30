@@ -2,161 +2,295 @@
     box-sizing: border-box;
 }
 
+
+/* ==========================================
+   CUERPO
+========================================== */
+
 body {
     margin: 0;
-    font-family: Arial, Helvetica, sans-serif;
-    background: linear-gradient(135deg, #eef2ff, #f8fafc);
+
+    font-family:
+        Arial,
+        Helvetica,
+        sans-serif;
+
+    background:
+        linear-gradient(
+            135deg,
+            #eef2ff,
+            #f8fafc
+        );
+
     color: #1e293b;
+
     min-height: 100vh;
+
+    transition:
+        background 0.4s ease,
+        color 0.4s ease;
 }
 
 
-/* ================================
+/* ==========================================
    CABECERA
-================================ */
+========================================== */
 
 header {
+    position: relative;
+
     text-align: center;
-    padding: 12px 10px 6px;
-    animation: aparecer 0.5s ease;
+
+    padding:
+        12px
+        60px
+        6px
+        10px;
+
+    animation:
+        aparecer
+        0.5s
+        ease;
 }
 
 header h1 {
     margin: 0;
+
     font-size: 25px;
 }
 
 header h2 {
     margin: 2px 0;
+
     font-size: 16px;
+
     color: #64748b;
 }
 
 header h3 {
     margin: 3px 0;
+
     font-size: 12px;
+
     color: #94a3b8;
 }
 
 
-/* ================================
+/* ==========================================
+   BOTÓN TEMA
+========================================== */
+
+.tema-btn {
+    position: absolute;
+
+    top: 15px;
+    right: 20px;
+
+    width: 40px;
+    height: 40px;
+
+    border: none;
+
+    border-radius: 50%;
+
+    background: white;
+
+    color: #1e293b;
+
+    font-size: 20px;
+
+    cursor: pointer;
+
+    box-shadow:
+        0 3px 10px
+        rgba(0, 0, 0, 0.12);
+
+    transition:
+        transform 0.3s ease,
+        background 0.4s ease,
+        color 0.4s ease;
+}
+
+.tema-btn:hover {
+    transform:
+        rotate(20deg)
+        scale(1.1);
+}
+
+.tema-btn:active {
+    transform:
+        scale(0.9);
+}
+
+
+/* ==========================================
    CONTENEDOR
-================================ */
+========================================== */
 
 .contenedor {
     width: 97%;
+
     max-width: 1250px;
+
     margin: auto;
+
     padding-bottom: 10px;
 }
 
 
-/* ================================
+/* ==========================================
    MENÚ
-================================ */
+========================================== */
 
 .menu {
     display: flex;
+
     justify-content: center;
+
     flex-wrap: wrap;
+
     gap: 6px;
+
     margin: 5px 0;
 }
 
 .menu button {
     border: none;
-    padding: 7px 12px;
+
+    padding:
+        7px
+        12px;
+
     border-radius: 8px;
 
     background: white;
+
     color: #334155;
 
     font-size: 12px;
+
     font-weight: 600;
 
     cursor: pointer;
 
-    box-shadow: 0 2px 7px rgba(0, 0, 0, 0.08);
+    box-shadow:
+        0 2px 7px
+        rgba(0, 0, 0, 0.08);
 
     transition:
         transform 0.2s ease,
         box-shadow 0.2s ease,
-        background 0.2s ease;
+        background 0.4s ease,
+        color 0.4s ease;
 }
 
 .menu button:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 5px 12px rgba(0, 0, 0, 0.12);
-    background: #f8fafc;
+    transform:
+        translateY(-2px);
+
+    box-shadow:
+        0 5px 12px
+        rgba(0, 0, 0, 0.12);
 }
 
 .menu button:active {
-    transform: scale(0.95);
+    transform:
+        scale(0.95);
 }
 
 
-/* ================================
+/* ==========================================
    LEYENDA
-================================ */
+========================================== */
 
 .leyenda {
     display: flex;
+
     justify-content: center;
+
     align-items: center;
+
     flex-wrap: wrap;
 
     gap: 10px;
 
     margin: 5px auto;
-    padding: 6px 10px;
 
-    background: rgba(255, 255, 255, 0.85);
+    padding:
+        6px
+        10px;
+
+    background:
+        rgba(255, 255, 255, 0.85);
 
     border-radius: 9px;
 
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+    box-shadow:
+        0 2px 8px
+        rgba(0, 0, 0, 0.06);
 
     font-size: 11px;
+
+    transition:
+        background 0.4s ease,
+        color 0.4s ease;
 }
 
 .leyenda-item {
     display: flex;
+
     align-items: center;
+
     gap: 4px;
 }
 
 .color {
     width: 12px;
+
     height: 12px;
+
     border-radius: 3px;
+
     display: inline-block;
 }
 
 
-/* ================================
-   CALENDARIO
-================================ */
+/* ==========================================
+   ZONA CALENDARIO
+========================================== */
 
 .zona-calendario {
-    background: rgba(255, 255, 255, 0.88);
+    background:
+        rgba(255, 255, 255, 0.88);
 
     border-radius: 12px;
 
     padding: 8px;
 
-    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.07);
+    box-shadow:
+        0 5px 20px
+        rgba(0, 0, 0, 0.07);
 
-    animation: subir 0.5s ease;
+    animation:
+        subir
+        0.5s
+        ease;
+
+    transition:
+        background 0.4s ease,
+        box-shadow 0.4s ease;
 }
 
 
-/* ================================
+/* ==========================================
    CONTROL DEL MES
-================================ */
+========================================== */
 
 .mes-control {
     display: flex;
+
     justify-content: center;
+
     align-items: center;
 
     gap: 12px;
@@ -170,17 +304,21 @@ header h3 {
     text-align: center;
 
     font-size: 19px;
+
     font-weight: 700;
 }
 
 .mes-control button {
     width: 30px;
+
     height: 30px;
 
     border: none;
+
     border-radius: 50%;
 
     background: #1e293b;
+
     color: white;
 
     font-size: 13px;
@@ -189,26 +327,30 @@ header h3 {
 
     transition:
         transform 0.2s ease,
-        background 0.2s ease;
+        background 0.4s ease,
+        color 0.4s ease;
 }
 
 .mes-control button:hover {
-    transform: scale(1.1);
-    background: #334155;
+    transform:
+        scale(1.1);
 }
 
 .mes-control button:active {
-    transform: scale(0.9);
+    transform:
+        scale(0.9);
 }
 
 
-/* ================================
+/* ==========================================
    DÍAS DE LA SEMANA
-================================ */
+========================================== */
 
 .dias-semana {
     display: grid;
-    grid-template-columns: repeat(5, 1fr);
+
+    grid-template-columns:
+        repeat(7, 1fr);
 
     gap: 5px;
 
@@ -219,24 +361,30 @@ header h3 {
     text-align: center;
 
     font-size: 12px;
+
     font-weight: 700;
 
     padding: 3px;
 
     color: #64748b;
+
+    transition:
+        color 0.4s ease;
 }
 
 
-/* ================================
+/* ==========================================
    CALENDARIO
-================================ */
+========================================== */
 
 .calendario {
     display: grid;
 
-    grid-template-columns: repeat(5, 1fr);
+    grid-template-columns:
+        repeat(7, 1fr);
 
-    grid-template-rows: repeat(6, minmax(75px, 1fr));
+    grid-template-rows:
+        repeat(6, minmax(70px, auto));
 
     gap: 5px;
 
@@ -246,23 +394,47 @@ header h3 {
 }
 
 
-/* Animación al cambiar de mes */
+/* ==========================================
+   ANIMACIÓN CAMBIO DE MES
+========================================== */
 
 .calendario.cambiando {
-    animation: cambioMes 0.35s ease;
+    animation:
+        cambioMes
+        0.35s
+        ease;
+}
+
+@keyframes cambioMes {
+
+    0% {
+        opacity: 0;
+
+        transform:
+            translateX(20px);
+    }
+
+    100% {
+        opacity: 1;
+
+        transform:
+            translateX(0);
+    }
 }
 
 
-/* ================================
+/* ==========================================
    CELDAS
-================================ */
+========================================== */
 
 .dia {
-    min-height: 75px;
+    min-height: 70px;
 
     background: white;
 
-    border: 1px solid #e2e8f0;
+    border:
+        1px solid
+        #e2e8f0;
 
     border-radius: 8px;
 
@@ -273,18 +445,17 @@ header h3 {
     transition:
         transform 0.2s ease,
         box-shadow 0.2s ease,
-        border-color 0.2s ease;
-
-    animation: celdaAparecer 0.3s ease backwards;
+        background 0.4s ease,
+        border-color 0.4s ease;
 }
 
 .dia:hover {
-    transform: translateY(-2px);
-
-    border-color: #cbd5e1;
+    transform:
+        translateY(-2px);
 
     box-shadow:
-        0 5px 12px rgba(0, 0, 0, 0.08);
+        0 5px 12px
+        rgba(0, 0, 0, 0.08);
 }
 
 .dia > strong {
@@ -296,14 +467,16 @@ header h3 {
 }
 
 
-/* ================================
+/* ==========================================
    EVENTOS
-================================ */
+========================================== */
 
 .evento {
     margin-top: 3px;
 
-    padding: 4px 5px;
+    padding:
+        4px
+        5px;
 
     border-radius: 5px;
 
@@ -313,25 +486,27 @@ header h3 {
 
     cursor: pointer;
 
+    color: #111827;
+
     transition:
         transform 0.15s ease,
         box-shadow 0.15s ease,
         filter 0.15s ease;
-
-    animation: eventoAparecer 0.3s ease;
 }
 
 .evento:hover {
-    transform: translateX(2px) scale(1.02);
-
-    filter: brightness(0.97);
+    transform:
+        translateX(2px)
+        scale(1.02);
 
     box-shadow:
-        0 3px 7px rgba(0, 0, 0, 0.12);
+        0 3px 7px
+        rgba(0, 0, 0, 0.12);
 }
 
 .evento:active {
-    transform: scale(0.97);
+    transform:
+        scale(0.97);
 }
 
 .asignatura {
@@ -343,9 +518,9 @@ header h3 {
 }
 
 
-/* ================================
+/* ==========================================
    COLORES
-================================ */
+========================================== */
 
 .evento.E,
 .color.E {
@@ -373,89 +548,153 @@ header h3 {
 }
 
 
-/* ================================
-   ANIMACIONES
-================================ */
+/* ==========================================
+   ANIMACIONES GENERALES
+========================================== */
 
 @keyframes aparecer {
 
     from {
         opacity: 0;
-        transform: translateY(-8px);
+
+        transform:
+            translateY(-8px);
     }
 
     to {
         opacity: 1;
-        transform: translateY(0);
-    }
 
+        transform:
+            translateY(0);
+    }
 }
 
 @keyframes subir {
 
     from {
         opacity: 0;
-        transform: translateY(12px);
+
+        transform:
+            translateY(12px);
     }
 
     to {
         opacity: 1;
-        transform: translateY(0);
-    }
 
+        transform:
+            translateY(0);
+    }
 }
 
 
-/* Cambio suave de mes */
+/* ==========================================
+   MODO OSCURO
+========================================== */
 
-@keyframes cambioMes {
+body.dark {
+    background:
+        linear-gradient(
+            135deg,
+            #0f172a,
+            #020617
+        );
 
-    0% {
-        opacity: 0;
-        transform: translateX(20px);
-    }
-
-    100% {
-        opacity: 1;
-        transform: translateX(0);
-    }
-
+    color: #e2e8f0;
 }
 
 
-@keyframes celdaAparecer {
+/* Cabecera */
 
-    from {
-        opacity: 0;
-        transform: scale(0.96);
-    }
+body.dark header h2 {
+    color: #94a3b8;
+}
 
-    to {
-        opacity: 1;
-        transform: scale(1);
-    }
-
+body.dark header h3 {
+    color: #64748b;
 }
 
 
-@keyframes eventoAparecer {
+/* Botón tema */
 
-    from {
-        opacity: 0;
-        transform: translateX(-5px);
-    }
+body.dark .tema-btn {
+    background: #1e293b;
 
-    to {
-        opacity: 1;
-        transform: translateX(0);
-    }
+    color: #facc15;
 
+    box-shadow:
+        0 3px 12px
+        rgba(0, 0, 0, 0.4);
 }
 
 
-/* ================================
+/* Menú */
+
+body.dark .menu button {
+    background: #1e293b;
+
+    color: #e2e8f0;
+}
+
+body.dark .menu button:hover {
+    background: #334155;
+}
+
+
+/* Leyenda */
+
+body.dark .leyenda {
+    background:
+        rgba(30, 41, 59, 0.9);
+
+    color: #e2e8f0;
+}
+
+
+/* Calendario */
+
+body.dark .zona-calendario {
+    background:
+        rgba(15, 23, 42, 0.92);
+
+    box-shadow:
+        0 5px 25px
+        rgba(0, 0, 0, 0.3);
+}
+
+
+/* Días */
+
+body.dark .dias-semana div {
+    color: #94a3b8;
+}
+
+body.dark .dia {
+    background: #1e293b;
+
+    border-color: #334155;
+}
+
+body.dark .dia:hover {
+    border-color: #475569;
+}
+
+
+/* Botones de mes */
+
+body.dark .mes-control button {
+    background: #e2e8f0;
+
+    color: #0f172a;
+}
+
+body.dark .mes-control button:hover {
+    background: white;
+}
+
+
+/* ==========================================
    MÓVIL
-================================ */
+========================================== */
 
 @media (max-width: 700px) {
 
@@ -477,21 +716,46 @@ header h3 {
 
     .calendario {
         gap: 3px;
-        grid-template-rows: repeat(6, minmax(60px, 1fr));
+
+        grid-template-rows:
+            repeat(
+                6,
+                minmax(55px, auto)
+            );
     }
 
     .dia {
-        min-height: 60px;
+        min-height: 55px;
+
         padding: 3px;
     }
 
     .evento {
         font-size: 8px;
+
         padding: 3px;
     }
 
     .asignatura {
         font-size: 7px;
+    }
+
+    .dias-semana {
+        gap: 3px;
+    }
+
+    .dias-semana div {
+        font-size: 10px;
+    }
+
+    .tema-btn {
+        width: 34px;
+        height: 34px;
+
+        top: 10px;
+        right: 10px;
+
+        font-size: 17px;
     }
 
 }
