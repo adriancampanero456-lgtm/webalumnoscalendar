@@ -1,3 +1,4 @@
+8,10,E,Física y Química, Examen Tema 1
 21,10,E,Inglés,Unit 1 Test
 21,10,E,Inglés,Speaking Unit 1
 22,10,T,Inglés,Writing Unit 1 Deadline
@@ -11,6 +12,7 @@
 19,11,R,Inglés,Bring Reading Book Term 1 - Dr Jekyll and Mr Hyde - Robert Louis Stevenson (Burlington)
 
 21,11,C, Adrián Soriano
+29,11,C, Nuria Porres
 30,11,E,Inglés,Reading Book Test
 
 30,11,O,Valenciano,Exposicions orals - Hugo - Martina - Iratxe - Nicolás - Sebastián - Joel M. - Blai - Nuria - Tatiana
@@ -19,4 +21,5 @@
 7,12,O,Valenciano,Exposicions orals - Zlata - Nur - Nerea - Mizar - Pilar - Sara - Assil - Adrián - Ashley
 9,12,E,Inglés,Global Test Term 1 (Unit 1, 2)
 14,12,O,Valenciano,Exposicions orals - Iñaki - Joel E. - Julen - Joel P. - Andrés - Zixu - Víctor - Miguel - Santiago - Guillermo
+8,2,C, Julen Dodero
 
