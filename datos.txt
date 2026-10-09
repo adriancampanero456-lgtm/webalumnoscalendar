@@ -5,6 +5,7 @@
 
 19,10,E,Valenciano,Prova 1
 16,10,T,Valenciano,Últim dia entrega treball expressió escrita
+16,10,E,Economía, Examen Tema 1
 
 12,11,E,Inglés,Speaking Unit 2 (In Class)
 16,11,T,Inglés,Writing Unit 2 Deadline
