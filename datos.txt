@@ -1,26 +1,32 @@
-20,10,E,Física y Química, Examen Tema 1
+16,10,T,Valenciano,Últim dia entrega treball expressió escrita
+16,10,E,Economía,Examen Tema 1
+19,10,E,Valenciano,Prova 1
+20,10,E,Física y Química,Examen Tema 1
 21,10,E,Inglés,Unit 1 Test
 21,10,E,Inglés,Speaking Unit 1
 22,10,T,Inglés,Writing Unit 1 Deadline
 
-19,10,E,Valenciano,Prova 1
-16,10,T,Valenciano,Últim dia entrega treball expressió escrita
-16,10,E,Economía, Examen Tema 1
-
 12,11,E,Inglés,Speaking Unit 2 (In Class)
 16,11,T,Inglés,Writing Unit 2 Deadline
 18,11,E,Inglés,Unit 2 Test
+18,11,E,Valenciano,Prova 2
 19,11,R,Inglés,Bring Reading Book Term 1 - Dr Jekyll and Mr Hyde - Robert Louis Stevenson (Burlington)
 
-21,11,C, Adrián Soriano
-29,11,C, Nuria Porres
+21,11,C,Adrián Soriano
+29,11,C,Nuria Porres
 30,11,E,Inglés,Reading Book Test
-
 30,11,O,Valenciano,Exposicions orals - Hugo - Martina - Iratxe - Nicolás - Sebastián - Joel M. - Blai - Nuria - Tatiana
 
 4,12,E,Valenciano,Prova llibre lectura
-11,12,O,Valenciano,Exposicions orals - Zlata - Nur - Nerea - Mizar - Pilar - Sara - Assil - Adrián - Ashley
 9,12,E,Inglés,Global Test Term 1 (Unit 1, 2)
+11,12,O,Valenciano,Exposicions orals - Zlata - Nur - Nerea - Mizar - Pilar - Sara - Assil - Adrián - Ashley
 14,12,O,Valenciano,Exposicions orals - Iñaki - Joel E. - Julen - Joel P. - Andrés - Zixu - Víctor - Miguel - Santiago - Guillermo
-8,2,C, Julen Dodero
+16,12,T,Valenciano,Treball llengües (falta explicar)
+18,12,T,Valenciano,Treball llengües (falta explicar)
 
+8,1,C,Valenciano,Llegir a classe llibre lectura 2a avaluació
+11,1,C,Valenciano,Llegir a classe llibre lectura 2a avaluació
+15,1,C,Valenciano,Llegir a classe llibre lectura 2a avaluació
+18,1,E,Valenciano,Prova llibre lectura
+
+8,2,C,Julen Dodero
