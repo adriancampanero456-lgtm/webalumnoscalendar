@@ -1,1046 +1,160 @@
+
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>Calendario - 4º ESO 2026-2027</title>
+    <meta name="theme-color" content="#f1f5f9">
+    <meta name="description" content="Calendario escolar de 4.º ESO para el curso 2026-2027.">
+    <title>Calendario escolar | 4.º ESO 2026-2027</title>
 
     <link rel="stylesheet" href="estilos.css">
-    <link rel="icon" type="image/png" href="favicon1.jpg">
+    <link rel="icon" type="image/jpeg" href="favicon1.jpg">
+    <script src="script.js" defer></script>
 </head>
 
 <body>
+    <header class="cabecera">
+        <div class="cabecera-contenido">
+            <div>
+                <p class="sobretitulo">MI AGENDA ESCOLAR</p>
+                <h1>Calendario escolar</h1>
+                <p class="subtitulo">4.º ESO · Curso 2026-2027</p>
+                <p id="hoy" class="fecha-hoy"></p>
+            </div>
 
-<header>
-
-    <h1>Calendario - 4º ESO</h1>
-    <h2>Curso 2026-2027</h2>
-    <h3 id="hoy"></h3>
-
-    <!-- BOTÓN TEMA -->
-    <button
-        id="temaBtn"
-        class="tema-btn"
-        onclick="cambiarTema()">
-        🌙
-    </button>
-
-</header>
-
-
-<div class="contenedor">
-
-
-    <!-- =====================================
-         ERROR BASE DE DATOS
-    ====================================== -->
-
-    <div id="errorDB" class="error-db">
-        Error: no se pudo leer la base de datos.
-    </div>
-
-
-    <!-- =====================================
-         CONTENIDO DEL CALENDARIO
-         Oculto hasta cargar datos.txt
-    ====================================== -->
-
-    <div
-        id="contenidoCalendario"
-        style="display: none;">
-
-
-        <!-- =================================
-             FILTROS
-        ================================== -->
-
-        <div class="menu">
-
-            <button onclick="filtrar('ALL')">
-                Todos
+            <button id="temaBtn" class="tema-btn"
+                    type="button" aria-label="Activar modo oscuro"
+                    title="Cambiar tema">
+                🌙
             </button>
-
-            <button onclick="filtrar('E')">
-                Exámenes
-            </button>
-
-            <button onclick="filtrar('T')">
-                Trabajos
-            </button>
-
-            <button onclick="filtrar('R')">
-                Lecturas
-            </button>
-
-            <button onclick="filtrar('O')">
-                Exposiciones
-            </button>
-
-            <button onclick="filtrar('C')">
-                Cumpleaños
-            </button>
-
         </div>
+    </header>
 
-
-        <!-- =================================
-             LEYENDA
-        ================================== -->
-
-        <div class="leyenda">
-
-            <strong>Leyenda:</strong>
-
-
-            <div class="leyenda-item">
-
-                <span class="color E"></span>
-
-                Exámenes
-
-            </div>
-
-
-            <div class="leyenda-item">
-
-                <span class="color T"></span>
-
-                Trabajos
-
-            </div>
-
-
-            <div class="leyenda-item">
-
-                <span class="color R"></span>
-
-                Lecturas
-
-            </div>
-
-
-            <div class="leyenda-item">
-
-                <span class="color O"></span>
-
-                Exposiciones
-
-            </div>
-
-
-            <div class="leyenda-item">
-
-                <span class="color C"></span>
-
-                Cumpleaños
-
-            </div>
-
-        </div>
-
-
-        <!-- =================================
-             ZONA CALENDARIO
-        ================================== -->
-
-        <div class="zona-calendario">
-
-
-            <!-- CONTROL DEL MES -->
-
-            <div class="mes-control">
-
-                <button onclick="cambiarMes(-1)">
-                    ⬅
+    <main class="contenedor">
+        <section id="errorDB" class="error-db" role="alert" hidden>
+            <span class="error-icono" aria-hidden="true">!</span>
+            <div>
+                <h2>No se pudo cargar el calendario</h2>
+                <p id="mensajeError">
+                    Comprueba que el archivo datos.txt existe y que estás
+                    abriendo la web desde un servidor.
+                </p>
+                <button id="reintentarBtn" type="button" class="boton boton-principal">
+                    Reintentar
                 </button>
+            </div>
+        </section>
 
-
-                <span id="mesActual"></span>
-
-
-                <button onclick="cambiarMes(1)">
-                    ➡
+        <section id="contenidoCalendario" hidden>
+            <section class="resumen">
+                <div>
+                    <span class="resumen-icono" aria-hidden="true">📚</span>
+                    <div>
+                        <p class="resumen-titulo">Tu curso, organizado</p>
+                        <p class="resumen-texto">
+                            Consulta exámenes, trabajos y fechas importantes.
+                        </p>
+                    </div>
+                </div>
+                <button id="hoyBtn" type="button" class="boton boton-secundario">
+                    Ir a hoy
                 </button>
+            </section>
 
-            </div>
+            <section class="panel-filtros" aria-label="Filtros de eventos">
+                <div class="seccion-titulo">
+                    <div>
+                        <h2>Mis eventos</h2>
+                        <p>Selecciona una categoría para filtrar.</p>
+                    </div>
+                    <span id="contadorEventos" class="contador">0 eventos</span>
+                </div>
 
+                <div class="menu" role="group" aria-label="Categorías">
+                    <button type="button" class="filtro activo" data-filtro="ALL"
+                            aria-pressed="true">Todos</button>
+                    <button type="button" class="filtro" data-filtro="E"
+                            aria-pressed="false">
+                        <span class="punto E"></span> Exámenes
+                    </button>
+                    <button type="button" class="filtro" data-filtro="T"
+                            aria-pressed="false">
+                        <span class="punto T"></span> Trabajos
+                    </button>
+                    <button type="button" class="filtro" data-filtro="R"
+                            aria-pressed="false">
+                        <span class="punto R"></span> Lecturas
+                    </button>
+                    <button type="button" class="filtro" data-filtro="O"
+                            aria-pressed="false">
+                        <span class="punto O"></span> Exposiciones
+                    </button>
+                    <button type="button" class="filtro" data-filtro="C"
+                            aria-pressed="false">
+                        <span class="punto C"></span> Cumpleaños
+                    </button>
+                </div>
+            </section>
 
-            <!-- DÍAS DE LA SEMANA -->
+            <section class="zona-calendario" aria-label="Calendario mensual">
+                <div class="mes-control">
+                    <button id="mesAnterior" class="flecha" type="button"
+                            aria-label="Mes anterior">‹</button>
 
-            <div class="dias-semana">
+                    <div class="mes-titulo">
+                        <h2 id="mesActual" aria-live="polite"></h2>
+                        <p>Curso 2026-2027</p>
+                    </div>
 
-                <div>L</div>
-                <div>M</div>
-                <div>X</div>
-                <div>J</div>
-                <div>V</div>
-                <div>S</div>
-                <div>D</div>
+                    <button id="mesSiguiente" class="flecha" type="button"
+                            aria-label="Mes siguiente">›</button>
+                </div>
 
-            </div>
+                <div class="dias-semana" aria-hidden="true">
+                    <div>Lun</div>
+                    <div>Mar</div>
+                    <div>Mié</div>
+                    <div>Jue</div>
+                    <div>Vie</div>
+                    <div>Sáb</div>
+                    <div>Dom</div>
+                </div>
 
+                <div id="calendario" class="calendario"></div>
 
-            <!-- CALENDARIO -->
+                <p class="ayuda-calendario">
+                    Selecciona un evento para consultar sus detalles.
+                </p>
+            </section>
 
-            <div
-                class="calendario"
-                id="calendario">
-            </div>
+            <section class="panel-proximos">
+                <div class="seccion-titulo">
+                    <div>
+                        <h2>Próximos eventos</h2>
+                        <p>Los siguientes eventos de tu agenda.</p>
+                    </div>
+                </div>
+                <div id="listaProximos" class="lista-proximos"></div>
+            </section>
 
+            <footer class="pie">
+                Calendario escolar · 4.º ESO · 2026-2027
+            </footer>
+        </section>
+    </main>
 
+    <dialog id="detalleDialog" class="detalle-dialog">
+        <div class="detalle-cabecera">
+            <span id="detalleCategoria" class="etiqueta"></span>
+            <button id="cerrarDetalle" class="cerrar-dialogo"
+                    type="button" aria-label="Cerrar">×</button>
         </div>
-
-    </div>
-
-</div>
-
-
-<script>
-
-/* =================================================
-   VARIABLES
-================================================= */
-
-let eventos = [];
-
-let filtroActual = "ALL";
-
-
-/* =================================================
-   FECHA ACTUAL
-================================================= */
-
-let fechaActual = new Date();
-
-let mesActual =
-    fechaActual.getMonth() + 1;
-
-let añoActual =
-    fechaActual.getFullYear();
-
-
-const nombresMeses = [
-
-    "Enero",
-    "Febrero",
-    "Marzo",
-    "Abril",
-    "Mayo",
-    "Junio",
-    "Julio",
-    "Agosto",
-    "Septiembre",
-    "Octubre",
-    "Noviembre",
-    "Diciembre"
-
-];
-
-
-/* =================================================
-   CARGAR BASE DE DATOS
-================================================= */
-
-fetch("datos.txt")
-
-    .then(res => {
-
-        /*
-            Si el archivo no existe
-            o el servidor devuelve un error
-        */
-
-        if (!res.ok) {
-
-            throw new Error(
-                "No se pudo leer datos.txt"
-            );
-
-        }
-
-
-        return res.text();
-
-    })
-
-
-    .then(texto => {
-
-        /*
-            Comprobar que no esté vacío
-        */
-
-        if (!texto.trim()) {
-
-            throw new Error(
-                "La base de datos está vacía"
-            );
-
-        }
-
-
-        /*
-            Separar líneas
-        */
-
-        const lineas =
-            texto
-                .trim()
-                .split(/\r?\n/)
-                .filter(
-                    linea =>
-                        linea.trim() !== ""
-                );
-
-
-        /*
-            Comprobar que haya líneas
-        */
-
-        if (lineas.length === 0) {
-
-            throw new Error(
-                "La base de datos está vacía"
-            );
-
-        }
-
-
-        /*
-            Convertir datos.txt
-            en objetos
-        */
-
-        eventos = lineas.map(linea => {
-
-            const partes =
-                linea.split(",");
-
-
-            /*
-                Formato:
-
-                dia,mes,categoria,
-                asignatura,descripcion
-            */
-
-            const dia =
-                parseInt(
-                    partes[0]
-                );
-
-
-            const mes =
-                parseInt(
-                    partes[1]
-                );
-
-
-            const categoria =
-                partes[2]
-                    ?.trim() || "";
-
-
-            const asignatura =
-                partes[3]
-                    ?.trim() || "";
-
-
-            const descripcion =
-                partes
-                    .slice(4)
-                    .join(",")
-                    .trim();
-
-
-            /*
-                Comprobar fecha
-            */
-
-            if (
-                isNaN(dia) ||
-                isNaN(mes)
-            ) {
-
-                throw new Error(
-                    "Datos incorrectos en datos.txt"
-                );
-
-            }
-
-
-            /*
-                Comprobar mes
-            */
-
-            if (
-                mes < 1 ||
-                mes > 12
-            ) {
-
-                throw new Error(
-                    "Mes incorrecto"
-                );
-
-            }
-
-
-            /*
-                Comprobar día
-            */
-
-            if (
-                dia < 1 ||
-                dia > 31
-            ) {
-
-                throw new Error(
-                    "Día incorrecto"
-                );
-
-            }
-
-
-            return {
-
-                dia: dia,
-
-                mes: mes,
-
-                categoria: categoria,
-
-                asignatura: asignatura,
-
-                descripcion: descripcion
-
-            };
-
-        });
-
-
-        /*
-            ==================================
-            BASE DE DATOS CORRECTA
-            ==================================
-        */
-
-        document.getElementById(
-            "errorDB"
-        ).style.display = "none";
-
-
-        document.getElementById(
-            "contenidoCalendario"
-        ).style.display = "block";
-
-
-        /*
-            Mostrar calendario
-        */
-
-        actualizarVista();
-
-    })
-
-
-    .catch(error => {
-
-        /*
-            Mostrar error en consola
-        */
-
-        console.error(
-            "Error de base de datos:",
-            error
-        );
-
-
-        /*
-            Ocultar TODO el calendario
-        */
-
-        document.getElementById(
-            "contenidoCalendario"
-        ).style.display = "none";
-
-
-        /*
-            Mostrar mensaje de error
-        */
-
-        const errorDB =
-            document.getElementById(
-                "errorDB"
-            );
-
-
-        errorDB.textContent =
-            "Error: no se pudo leer la base de datos.";
-
-
-        errorDB.style.display =
-            "block";
-
-    });
-
-
-/* =================================================
-   ACTUALIZAR VISTA
-================================================= */
-
-function actualizarVista() {
-
-    document.getElementById(
-        "mesActual"
-    ).textContent =
-
-        `${nombresMeses[mesActual - 1]} ${añoActual}`;
-
-
-    generarCalendario(
-        mesActual,
-        añoActual
-    );
-
-}
-
-
-/* =================================================
-   GENERAR CALENDARIO
-================================================= */
-
-function generarCalendario(
-    mes,
-    año
-) {
-
-    const calendario =
-        document.getElementById(
-            "calendario"
-        );
-
-
-    /*
-        Animación
-    */
-
-    calendario.classList.remove(
-        "cambiando"
-    );
-
-
-    void calendario.offsetWidth;
-
-
-    calendario.classList.add(
-        "cambiando"
-    );
-
-
-    calendario.innerHTML = "";
-
-
-    /*
-        Número de días del mes
-    */
-
-    const diasMes =
-        new Date(
-            año,
-            mes,
-            0
-        ).getDate();
-
-
-    /*
-        Día de la semana
-        del día 1
-    */
-
-    let primerDia =
-        new Date(
-            año,
-            mes - 1,
-            1
-        ).getDay();
-
-
-    /*
-        Convertir:
-
-        Domingo = 0
-
-        a:
-
-        Lunes = 0
-        Martes = 1
-        ...
-        Domingo = 6
-    */
-
-    primerDia =
-        primerDia === 0
-            ? 6
-            : primerDia - 1;
-
-
-    /*
-        42 celdas:
-
-        6 semanas × 7 días
-    */
-
-    for (
-        let posicion = 0;
-        posicion < 42;
-        posicion++
-    ) {
-
-
-        const celda =
-            document.createElement(
-                "div"
-            );
-
-
-        celda.classList.add(
-            "dia"
-        );
-
-
-        /*
-            Calcular número
-        */
-
-        const diaNumero =
-            posicion -
-            primerDia +
-            1;
-
-
-        /*
-            Celda vacía
-        */
-
-        if (
-            diaNumero < 1 ||
-            diaNumero > diasMes
-        ) {
-
-            calendario.appendChild(
-                celda
-            );
-
-            continue;
-
-        }
-
-
-        /*
-            Número del día
-        */
-
-        const numero =
-            document.createElement(
-                "strong"
-            );
-
-
-        numero.textContent =
-            diaNumero;
-
-
-        celda.appendChild(
-            numero
-        );
-
-
-        /*
-            Buscar eventos
-        */
-
-        const eventosDia =
-            eventos.filter(e =>
-
-                Number(e.dia) ===
-                    diaNumero &&
-
-                Number(e.mes) ===
-                    mes
-
-            );
-
-
-        /*
-            Añadir eventos
-        */
-
-        eventosDia.forEach(e => {
-
-
-            /*
-                Aplicar filtro
-            */
-
-            if (
-                filtroActual !== "ALL" &&
-                filtroActual !== e.categoria
-            ) {
-
-                return;
-
-            }
-
-
-            const eventoDiv =
-                document.createElement(
-                    "div"
-                );
-
-
-            eventoDiv.classList.add(
-                "evento",
-                e.categoria
-            );
-
-
-            /*
-                Asignatura
-            */
-
-            const asignatura =
-                document.createElement(
-                    "strong"
-                );
-
-
-            asignatura.classList.add(
-                "asignatura"
-            );
-
-
-            asignatura.textContent =
-                e.asignatura;
-
-
-            /*
-                Descripción
-            */
-
-            const descripcion =
-                document.createElement(
-                    "span"
-                );
-
-
-            descripcion.textContent =
-                e.descripcion;
-
-
-            /*
-                Añadir elementos
-            */
-
-            eventoDiv.appendChild(
-                asignatura
-            );
-
-
-            eventoDiv.appendChild(
-                document.createElement(
-                    "br"
-                )
-            );
-
-
-            eventoDiv.appendChild(
-                descripcion
-            );
-
-
-            /*
-                Al pulsar evento
-            */
-
-            eventoDiv.onclick = () => {
-
-                alert(
-
-                    e.asignatura +
-                    "\n\n" +
-                    e.descripcion
-
-                );
-
-            };
-
-
-            /*
-                Añadir evento
-                a la celda
-            */
-
-            celda.appendChild(
-                eventoDiv
-            );
-
-        });
-
-
-        /*
-            Añadir celda
-        */
-
-        calendario.appendChild(
-            celda
-        );
-
-    }
-
-}
-
-
-/* =================================================
-   FILTRAR
-================================================= */
-
-function filtrar(
-    categoria
-) {
-
-    filtroActual =
-        categoria;
-
-
-    actualizarVista();
-
-}
-
-
-/* =================================================
-   CAMBIAR MES
-================================================= */
-
-function cambiarMes(direccion) {
-
-    let nuevoMes = mesActual + direccion;
-    let nuevoAño = añoActual;
-
-
-    // Pasar de diciembre a enero
-    if (nuevoMes > 12) {
-        nuevoMes = 1;
-        nuevoAño++;
-    }
-
-
-    // Pasar de enero a diciembre
-    if (nuevoMes < 1) {
-        nuevoMes = 12;
-        nuevoAño--;
-    }
-
-
-    /*
-        Límite inferior:
-        Septiembre de 2026
-    */
-
-    if (
-        nuevoAño < 2026 ||
-        (
-            nuevoAño === 2026 &&
-            nuevoMes < 9
-        )
-    ) {
-        return;
-    }
-
-
-    /*
-        Límite superior:
-        Junio de 2027
-    */
-
-    if (
-        nuevoAño > 2027 ||
-        (
-            nuevoAño === 2027 &&
-            nuevoMes > 6
-        )
-    ) {
-        return;
-    }
-
-
-    // Aplicar nuevo mes
-    mesActual = nuevoMes;
-    añoActual = nuevoAño;
-
-
-    actualizarVista();
-}
-
-
-/* =================================================
-   MOSTRAR FECHA DE HOY
-================================================= */
-
-function mostrarDiaHoy() {
-
-    const hoy =
-        new Date();
-
-
-    const dias = [
-
-        "domingo",
-        "lunes",
-        "martes",
-        "miércoles",
-        "jueves",
-        "viernes",
-        "sábado"
-
-    ];
-
-
-    const meses = [
-
-        "enero",
-        "febrero",
-        "marzo",
-        "abril",
-        "mayo",
-        "junio",
-        "julio",
-        "agosto",
-        "septiembre",
-        "octubre",
-        "noviembre",
-        "diciembre"
-
-    ];
-
-
-    document.getElementById(
-        "hoy"
-    ).textContent =
-
-        `Hoy es ${dias[hoy.getDay()]} ` +
-        `${hoy.getDate()} de ` +
-        `${meses[hoy.getMonth()]} de ` +
-        `${hoy.getFullYear()}`;
-
-}
-
-
-mostrarDiaHoy();
-
-
-/* =================================================
-   MODO OSCURO
-================================================= */
-
-function cambiarTema() {
-
-    document.body.classList.toggle(
-        "dark"
-    );
-
-
-    const boton =
-        document.getElementById(
-            "temaBtn"
-        );
-
-
-    if (
-        document.body.classList.contains(
-            "dark"
-        )
-    ) {
-
-        boton.textContent =
-            "☀️";
-
-
-        localStorage.setItem(
-            "tema",
-            "dark"
-        );
-
-    }
-
-    else {
-
-        boton.textContent =
-            "🌙";
-
-
-        localStorage.setItem(
-            "tema",
-            "light"
-        );
-
-    }
-
-}
-
-
-/* =================================================
-   CARGAR TEMA GUARDADO
-================================================= */
-
-function cargarTema() {
-
-    const tema =
-        localStorage.getItem(
-            "tema"
-        );
-
-
-    const boton =
-        document.getElementById(
-            "temaBtn"
-        );
-
-
-    if (
-        tema === "dark"
-    ) {
-
-        document.body.classList.add(
-            "dark"
-        );
-
-
-        boton.textContent =
-            "☀️";
-
-    }
-
-    else {
-
-        document.body.classList.remove(
-            "dark"
-        );
-
-
-        boton.textContent =
-            "🌙";
-
-    }
-
-}
-
-
-cargarTema();
-
-</script>
-
+        <p id="detalleFecha" class="detalle-fecha"></p>
+        <h2 id="detalleAsignatura"></h2>
+        <p id="detalleDescripcion" class="detalle-descripcion"></p>
+        <button id="cerrarDetalleBtn" type="button"
+                class="boton boton-principal">Cerrar</button>
+    </dialog>
 </body>
-
 </html>
