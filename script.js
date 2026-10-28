@@ -2,8 +2,11 @@
 "use strict";
 
 /* =========================================
-   CONFIGURACIÓN DEL CALENDARIO
+   CONFIGURACIÓN
 ========================================= */
+
+const INICIO_CURSO = { mes: 9, año: 2026 };
+const FIN_CURSO = { mes: 6, año: 2027 };
 
 const CATEGORIAS = {
     E: "Exámenes",
@@ -14,8 +17,9 @@ const CATEGORIAS = {
 };
 
 const MESES = [
-    "enero", "febrero", "marzo", "abril", "mayo", "junio",
-    "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre"
+    "enero", "febrero", "marzo", "abril",
+    "mayo", "junio", "julio", "agosto",
+    "septiembre", "octubre", "noviembre", "diciembre"
 ];
 
 const DIAS = [
@@ -23,28 +27,33 @@ const DIAS = [
     "jueves", "viernes", "sábado"
 ];
 
-const INICIO_CURSO = { mes: 9, año: 2026 };
-const FIN_CURSO = { mes: 6, año: 2027 };
+/* =========================================
+   ESTADO
+========================================= */
 
 let eventos = [];
 let filtroActual = "ALL";
 
+const ahora = new Date();
+
+let mesActual = ahora.getMonth() + 1;
+let añoActual = ahora.getFullYear();
+
 const $ = id => document.getElementById(id);
 
-const fechaInicial = new Date();
-let mesActual = fechaInicial.getMonth() + 1;
-let añoActual = fechaInicial.getFullYear();
-
 /* =========================================
-   FUNCIONES DE FECHAS
+   FECHAS
 ========================================= */
 
-function estaDentroDelCurso(año, mes) {
-    const fecha = año * 12 + mes;
-    const inicio = INICIO_CURSO.año * 12 + INICIO_CURSO.mes;
-    const fin = FIN_CURSO.año * 12 + FIN_CURSO.mes;
+function compararMeses(año1, mes1, año2, mes2) {
+    return año1 * 12 + mes1 - (año2 * 12 + mes2);
+}
 
-    return fecha >= inicio && fecha <= fin;
+function estaDentroDelCurso(año, mes) {
+    return (
+        compararMeses(año, mes, 2026, 9) >= 0 &&
+        compararMeses(año, mes, 2027, 6) <= 0
+    );
 }
 
 function diasDelMes(mes, año) {
@@ -57,43 +66,25 @@ function fechaEvento(evento) {
 }
 
 function formatoFecha(fecha) {
-    return new Intl.DateTimeFormat("es-ES", {
-        weekday: "long",
-        day: "numeric",
-        month: "long",
-        year: "numeric"
-    }).format(fecha);
-}
-
-function fechaCorta(fecha) {
-    return new Intl.DateTimeFormat("es-ES", {
-        day: "numeric",
-        month: "short"
-    }).format(fecha);
-}
-
-function normalizarTexto(texto) {
-    return texto.trim();
+    return `${DIAS[fecha.getDay()]}, ${fecha.getDate()} de ${
+        MESES[fecha.getMonth()]
+    } de ${fecha.getFullYear()}`;
 }
 
 function mostrarFechaHoy() {
-    const elemento = $("hoy");
-    if (!elemento) return;
-
-    elemento.textContent = "Hoy es " + formatoFecha(new Date());
+    $("hoy").textContent = `Hoy es ${formatoFecha(new Date())}`;
 }
 
 /* =========================================
-   CARGA DE DATOS.TXT
+   CARGA DE DATOS
+   Formato:
+   dia,mes,categoria,asignatura,descripcion
 ========================================= */
 
 async function cargarDatos() {
-    const contenido = $("contenidoCalendario");
-    const errorDB = $("errorDB");
-    const mensajeError = $("mensajeError");
-
-    if (contenido) contenido.hidden = true;
-    if (errorDB) errorDB.hidden = true;
+    $("contenidoCalendario").hidden = true;
+    $("errorDB").hidden = true;
+    $("reintentarBtn").disabled = true;
 
     try {
         const respuesta = await fetch("datos.txt", {
@@ -102,245 +93,234 @@ async function cargarDatos() {
 
         if (!respuesta.ok) {
             throw new Error(
-                "No se ha podido leer datos.txt (HTTP " +
-                respuesta.status + ")."
+                `No se pudo leer datos.txt (HTTP ${respuesta.status}).`
             );
         }
 
         const texto = await respuesta.text();
+
+        if (!texto.trim()) {
+            throw new Error("El archivo datos.txt está vacío.");
+        }
+
         const lineas = texto.split(/\r?\n/);
-        const nuevosEventos = [];
+        const datos = [];
 
         for (let i = 0; i < lineas.length; i++) {
             const linea = lineas[i].trim();
 
-            if (!linea || linea.startsWith("#")) {
-                continue;
-            }
+            if (!linea) continue;
 
-            const partes = linea.split(",").map(normalizarTexto);
+            const partes = linea.split(",");
 
-            if (partes.length < 4) {
-                console.warn(
-                    `Línea ${i + 1} ignorada: faltan campos.`,
-                    linea
+            if (partes.length < 5) {
+                throw new Error(
+                    `La línea ${i + 1} no tiene todos los campos.`
                 );
-                continue;
             }
 
-            const dia = Number(partes[0]);
-            const mes = Number(partes[1]);
-            const categoria = partes[2];
+            const diaTexto = partes[0].trim();
+            const mesTexto = partes[1].trim();
+            const categoria = partes[2].trim().toUpperCase();
+            const asignatura = partes[3].trim();
+            const descripcion = partes.slice(4).join(",").trim();
 
-            if (
-                !Number.isInteger(dia) ||
-                !Number.isInteger(mes) ||
-                mes < 1 ||
-                mes > 12 ||
-                !CATEGORIAS[categoria]
-            ) {
-                console.warn(
-                    `Línea ${i + 1} ignorada: fecha o categoría inválida.`,
-                    linea
+            if (!/^\d+$/.test(diaTexto) ||
+                !/^\d+$/.test(mesTexto)) {
+                throw new Error(
+                    `Fecha incorrecta en la línea ${i + 1}.`
                 );
-                continue;
             }
 
-            let asignatura;
-            let descripcion;
-
-            if (categoria === "C") {
-                // Formato cumpleaños: día,mes,C,nombre
-                if (partes.length < 4 || !partes[3]) {
-                    console.warn(
-                        `Línea ${i + 1} ignorada: falta el nombre.`,
-                        linea
-                    );
-                    continue;
-                }
-
-                asignatura = partes.slice(3).join(", ");
-                descripcion = "Cumpleaños";
-            } else {
-                // Formato normal: día,mes,categoría,asignatura,descripción
-                if (
-                    partes.length < 5 ||
-                    !partes[3] ||
-                    !partes.slice(4).join(", ").trim()
-                ) {
-                    console.warn(
-                        `Línea ${i + 1} ignorada: faltan datos del evento.`,
-                        linea
-                    );
-                    continue;
-                }
-
-                asignatura = partes[3];
-                descripcion = partes.slice(4).join(", ");
-            }
-
+            const dia = Number(diaTexto);
+            const mes = Number(mesTexto);
             const año = mes >= 9 ? 2026 : 2027;
+
+            if (mes < 1 || mes > 12) {
+                throw new Error(
+                    `Mes incorrecto en la línea ${i + 1}.`
+                );
+            }
 
             if (
                 !estaDentroDelCurso(año, mes) ||
                 dia < 1 ||
                 dia > diasDelMes(mes, año)
             ) {
-                console.warn(
-                    `Línea ${i + 1} ignorada: fecha fuera del curso o inexistente.`,
-                    linea
+                throw new Error(
+                    `Fecha fuera del curso o inexistente en la línea ${i + 1}.`
                 );
-                continue;
             }
 
-            nuevosEventos.push({
+            if (!Object.hasOwn(CATEGORIAS, categoria)) {
+                throw new Error(
+                    `Categoría "${categoria}" desconocida en la línea ${i + 1}.`
+                );
+            }
+
+            if (!asignatura || !descripcion) {
+                throw new Error(
+                    `Falta asignatura o descripción en la línea ${i + 1}.`
+                );
+            }
+
+            datos.push({
                 dia,
                 mes,
                 categoria,
                 asignatura,
-                descripcion,
-                fecha: new Date(año, mes - 1, dia)
+                descripcion
             });
         }
 
-        eventos = nuevosEventos;
-
-        if (eventos.length === 0) {
-            console.warn("datos.txt se ha leído, pero no contiene eventos válidos.");
+        if (datos.length === 0) {
+            throw new Error("No hay eventos válidos en datos.txt.");
         }
 
-        actualizarVista();
+        eventos = datos;
 
-        if (contenido) contenido.hidden = false;
-        if (errorDB) errorDB.hidden = true;
+        $("errorDB").hidden = true;
+        $("contenidoCalendario").hidden = false;
+
+        actualizarVista();
 
     } catch (error) {
         console.error("Error al cargar el calendario:", error);
 
-        if (contenido) contenido.hidden = true;
-        if (errorDB) errorDB.hidden = false;
+        $("contenidoCalendario").hidden = true;
+        $("errorDB").hidden = false;
 
-        if (mensajeError) {
-            mensajeError.textContent =
-                "No se han podido cargar los eventos. " +
-                "Comprueba que datos.txt esté en la misma carpeta y " +
-                "que la página se esté ejecutando desde un servidor web.";
-        }
+        $("mensajeError").textContent =
+            `${error.message} Comprueba el archivo y vuelve a intentarlo.`;
+
+    } finally {
+        $("reintentarBtn").disabled = false;
     }
 }
 
 /* =========================================
-   ACTUALIZACIÓN DE LA VISTA
+   ACTUALIZAR LA VISTA
 ========================================= */
 
-function eventosDelMes(mes, año) {
-    return eventos.filter(evento => {
-        const fecha = fechaEvento(evento);
-
-        return (
-            fecha.getMonth() + 1 === mes &&
-            fecha.getFullYear() === año &&
-            (filtroActual === "ALL" ||
-                evento.categoria === filtroActual)
-        );
-    });
+function eventosFiltrados() {
+    return eventos.filter(evento =>
+        filtroActual === "ALL" ||
+        evento.categoria === filtroActual
+    );
 }
 
 function actualizarVista() {
-    const titulo = $("mesActual");
+    $("mesActual").textContent =
+        `${MESES[mesActual - 1]} ${añoActual}`;
 
-    if (titulo) {
-        titulo.textContent =
-            MESES[mesActual - 1].charAt(0).toLocaleUpperCase("es-ES") +
-            MESES[mesActual - 1].slice(1) +
-            " " + añoActual;
-    }
+    $("mesAnterior").disabled =
+        !estaDentroDelCurso(
+            añoActual,
+            mesActual - 1
+        );
 
-    const anterior = $("mesAnterior");
-    const siguiente = $("mesSiguiente");
-
-    if (anterior) {
-        anterior.disabled =
-            !estaDentroDelCurso(añoActual, mesActual - 1) &&
-            !(mesActual === 1 &&
-              estaDentroDelCurso(añoActual - 1, 12));
-    }
-
-    if (siguiente) {
-        siguiente.disabled =
-            !estaDentroDelCurso(añoActual, mesActual + 1) &&
-            !(mesActual === 12 &&
-              estaDentroDelCurso(añoActual + 1, 1));
-    }
+    $("mesSiguiente").disabled =
+        !estaDentroDelCurso(
+            añoActual,
+            mesActual + 1
+        );
 
     document.querySelectorAll("[data-filtro]").forEach(boton => {
         const activo = boton.dataset.filtro === filtroActual;
+
         boton.classList.toggle("activo", activo);
         boton.setAttribute("aria-pressed", String(activo));
     });
 
+    $("contadorEventos").textContent =
+        `${eventosFiltrados().length} ${
+            eventosFiltrados().length === 1 ? "evento" : "eventos"
+        }`;
+
     generarCalendario();
     generarProximos();
-
-    const contador = $("contadorEventos");
-    if (contador) {
-        contador.textContent = eventosDelMes(mesActual, añoActual).length;
-    }
 }
 
 /* =========================================
-   GENERAR CALENDARIO MENSUAL
+   GENERAR CALENDARIO
 ========================================= */
 
 function generarCalendario() {
-    const contenedor = $("calendario");
-    if (!contenedor) return;
+    const calendario = $("calendario");
+    const fragmento = document.createDocumentFragment();
 
-    contenedor.replaceChildren();
+    calendario.replaceChildren();
 
-    const primerDia = new Date(añoActual, mesActual - 1, 1);
-    const desplazamiento = (primerDia.getDay() + 6) % 7;
+    const primerDia = new Date(
+        añoActual,
+        mesActual - 1,
+        1
+    ).getDay();
+
+    // Convertir domingo = 0 a lunes = 0.
+    const desplazamiento = (primerDia + 6) % 7;
     const totalDias = diasDelMes(mesActual, añoActual);
 
     const hoy = new Date();
-    const hoyDia = hoy.getDate();
-    const hoyMes = hoy.getMonth() + 1;
-    const hoyAño = hoy.getFullYear();
+    hoy.setHours(0, 0, 0, 0);
 
-    for (let i = 0; i < 42; i++) {
-        const numeroDia = i - desplazamiento + 1;
+    const seleccionada = new Date(
+        añoActual,
+        mesActual - 1,
+        1
+    );
+
+    for (let posicion = 0; posicion < 42; posicion++) {
+        const numeroDia = posicion - desplazamiento + 1;
         const celda = document.createElement("div");
-
-        if (numeroDia < 1 || numeroDia > totalDias) {
-            celda.className = "dia vacio";
-            celda.setAttribute("aria-hidden", "true");
-            contenedor.appendChild(celda);
-            continue;
-        }
 
         celda.className = "dia";
 
-        if (
-            numeroDia === hoyDia &&
-            mesActual === hoyMes &&
-            añoActual === hoyAño
-        ) {
+        if (numeroDia < 1 || numeroDia > totalDias) {
+            celda.classList.add("vacio");
+            celda.setAttribute("aria-hidden", "true");
+            fragmento.appendChild(celda);
+            continue;
+        }
+
+        const fecha = new Date(
+            añoActual,
+            mesActual - 1,
+            numeroDia
+        );
+
+        const esHoy = fecha.getTime() === hoy.getTime();
+
+        if (esHoy) {
             celda.classList.add("hoy");
         }
 
-        const numero = document.createElement("span");
+        const numero = document.createElement("div");
         numero.className = "numero-dia";
         numero.textContent = numeroDia;
+
+        if (esHoy) {
+            numero.setAttribute("aria-label", "Hoy");
+            numero.title = "Hoy";
+        }
+
         celda.appendChild(numero);
 
-        const eventosDia = eventosDelMes(mesActual, añoActual)
-            .filter(evento => evento.dia === numeroDia);
+        const eventosDia = eventosFiltrados().filter(evento =>
+            evento.dia === numeroDia &&
+            evento.mes === mesActual
+        );
 
         eventosDia.forEach(evento => {
             const boton = document.createElement("button");
+
             boton.type = "button";
-            boton.className = "evento " + evento.categoria;
-            boton.title = `${evento.asignatura}: ${evento.descripcion}`;
+            boton.className = `evento ${evento.categoria}`;
+
+            boton.setAttribute(
+                "aria-label",
+                `${CATEGORIAS[evento.categoria]}: ${evento.asignatura}. ${evento.descripcion}`
+            );
 
             const asignatura = document.createElement("strong");
             asignatura.textContent = evento.asignatura;
@@ -354,8 +334,10 @@ function generarCalendario() {
             celda.appendChild(boton);
         });
 
-        contenedor.appendChild(celda);
+        fragmento.appendChild(celda);
     }
+
+    calendario.appendChild(fragmento);
 }
 
 /* =========================================
@@ -363,41 +345,23 @@ function generarCalendario() {
 ========================================= */
 
 function mostrarDetalle(evento) {
-    const dialogo = $("detalleDialog");
-    if (!dialogo) return;
+    $("detalleCategoria").textContent =
+        CATEGORIAS[evento.categoria];
 
-    const categoria = $("detalleCategoria");
-    const fecha = $("detalleFecha");
-    const asignatura = $("detalleAsignatura");
-    const descripcion = $("detalleDescripcion");
+    $("detalleCategoria").className =
+        `etiqueta categoria-${evento.categoria}`;
 
-    if (categoria) {
-        categoria.textContent = CATEGORIAS[evento.categoria];
-        categoria.className = "etiqueta " + evento.categoria;
-    }
+    $("detalleFecha").textContent =
+        formatoFecha(fechaEvento(evento));
 
-    if (fecha) {
-        fecha.textContent = formatoFecha(fechaEvento(evento));
-    }
+    $("detalleAsignatura").textContent = evento.asignatura;
+    $("detalleDescripcion").textContent = evento.descripcion;
 
-    if (asignatura) {
-        asignatura.textContent = evento.asignatura;
-    }
-
-    if (descripcion) {
-        descripcion.textContent = evento.descripcion;
-    }
-
-    if (!dialogo.open) {
-        dialogo.showModal();
-    }
+    $("detalleDialog").showModal();
 }
 
 function cerrarDetalle() {
-    const dialogo = $("detalleDialog");
-    if (dialogo && dialogo.open) {
-        dialogo.close();
-    }
+    $("detalleDialog").close();
 }
 
 /* =========================================
@@ -406,81 +370,116 @@ function cerrarDetalle() {
 
 function generarProximos() {
     const lista = $("listaProximos");
-    if (!lista) return;
-
-    lista.replaceChildren();
-
     const hoy = new Date();
     hoy.setHours(0, 0, 0, 0);
 
-    const proximos = eventos
-        .filter(evento => {
-            return filtroActual === "ALL" ||
-                evento.categoria === filtroActual;
-        })
+    const proximos = eventosFiltrados()
         .map(evento => ({
-            ...evento,
+            evento,
             fecha: fechaEvento(evento)
         }))
-        .filter(evento => evento.fecha >= hoy)
+        .filter(item => item.fecha >= hoy)
         .sort((a, b) => a.fecha - b.fecha)
         .slice(0, 6);
 
+    lista.replaceChildren();
+
     if (proximos.length === 0) {
         const mensaje = document.createElement("p");
-        mensaje.textContent = "No hay próximos eventos.";
+        mensaje.className = "sin-eventos";
+        mensaje.textContent =
+            "No hay próximos eventos para esta categoría.";
         lista.appendChild(mensaje);
         return;
     }
 
-    proximos.forEach(evento => {
-        const elemento = document.createElement("button");
-        elemento.type = "button";
-        elemento.className =
-            "proximo-evento " + evento.categoria;
+    proximos.forEach(({ evento, fecha }) => {
+        const tarjeta = document.createElement("article");
+        tarjeta.className =
+            `proximo-evento ${evento.categoria}`;
 
-        const fecha = document.createElement("span");
-        fecha.className = "proximo-fecha";
-        fecha.textContent = fechaCorta(evento.fecha);
+        const fechaCaja = document.createElement("div");
+        fechaCaja.className = "proximo-fecha";
 
-        const info = document.createElement("span");
+        const numero = document.createElement("strong");
+        numero.textContent = fecha.getDate();
+
+        const mes = document.createElement("span");
+        mes.textContent = MESES[fecha.getMonth()].slice(0, 3);
+
+        fechaCaja.append(numero, mes);
+
+        const info = document.createElement("div");
         info.className = "proximo-info";
 
-        const titulo = document.createElement("strong");
-        titulo.textContent = evento.asignatura;
+        const asignatura = document.createElement("strong");
+        asignatura.textContent = evento.asignatura;
 
-        const detalle = document.createElement("span");
-        detalle.textContent = evento.descripcion;
+        const descripcion = document.createElement("p");
+        descripcion.textContent = evento.descripcion;
 
-        info.append(titulo, detalle);
-        elemento.append(fecha, info);
+        const fechaTexto = document.createElement("p");
+        fechaTexto.textContent = formatoFecha(fecha);
 
-        elemento.addEventListener("click", () => {
-            mesActual = evento.fecha.getMonth() + 1;
-            añoActual = evento.fecha.getFullYear();
+        info.append(asignatura, descripcion, fechaTexto);
+        tarjeta.append(fechaCaja, info);
+
+        tarjeta.tabIndex = 0;
+        tarjeta.setAttribute(
+            "aria-label",
+            `${formatoFecha(fecha)}: ${evento.asignatura}`
+        );
+
+        tarjeta.addEventListener("click", () => {
+            mesActual = fecha.getMonth() + 1;
+            añoActual = fecha.getFullYear();
             actualizarVista();
             mostrarDetalle(evento);
+            $("mesActual").scrollIntoView({
+                behavior: "smooth",
+                block: "center"
+            });
         });
 
-        lista.appendChild(elemento);
+        tarjeta.addEventListener("keydown", e => {
+            if (e.key === "Enter" || e.key === " ") {
+                e.preventDefault();
+                tarjeta.click();
+            }
+        });
+
+        lista.appendChild(tarjeta);
     });
 }
+
+/* =========================================
+   FILTROS
+========================================= */
+
+document.querySelectorAll("[data-filtro]").forEach(boton => {
+    boton.addEventListener("click", () => {
+        filtroActual = boton.dataset.filtro;
+        actualizarVista();
+    });
+});
 
 /* =========================================
    NAVEGACIÓN ENTRE MESES
 ========================================= */
 
-function cambiarMes(cantidad) {
-    const nuevaFecha = new Date(
+function cambiarMes(direccion) {
+    const fecha = new Date(
         añoActual,
-        mesActual - 1 + cantidad,
+        mesActual - 1 + direccion,
         1
     );
 
-    const nuevoMes = nuevaFecha.getMonth() + 1;
-    const nuevoAño = nuevaFecha.getFullYear();
+    const nuevoMes = fecha.getMonth() + 1;
+    const nuevoAño = fecha.getFullYear();
 
-    if (!estaDentroDelCurso(nuevoAño, nuevoMes)) return;
+    if (!estaDentroDelCurso(nuevoAño, nuevoMes)) {
+        return;
+    }
 
     mesActual = nuevoMes;
     añoActual = nuevoAño;
@@ -488,220 +487,84 @@ function cambiarMes(cantidad) {
     actualizarVista();
 }
 
-function irAlMesActual() {
-    const ahora = new Date();
-    const mes = ahora.getMonth() + 1;
-    const año = ahora.getFullYear();
+$("mesAnterior").addEventListener("click", () => cambiarMes(-1));
+$("mesSiguiente").addEventListener("click", () => cambiarMes(1));
 
-    if (estaDentroDelCurso(año, mes)) {
-        mesActual = mes;
-        añoActual = año;
+$("hoyBtn").addEventListener("click", () => {
+    const hoy = new Date();
+
+    if (estaDentroDelCurso(hoy.getFullYear(), hoy.getMonth() + 1)) {
+        mesActual = hoy.getMonth() + 1;
+        añoActual = hoy.getFullYear();
     } else {
-        mesActual = INICIO_CURSO.mes;
-        añoActual = INICIO_CURSO.año;
+        mesActual = 9;
+        añoActual = 2026;
     }
 
     actualizarVista();
-}
+});
 
 /* =========================================
-   FILTROS
+   MODO OSCURO
 ========================================= */
 
-function configurarFiltros() {
-    document.querySelectorAll("[data-filtro]").forEach(boton => {
-        boton.addEventListener("click", () => {
-            filtroActual = boton.dataset.filtro;
-            actualizarVista();
-        });
-    });
-}
-
-/* =========================================
-   TEMA CLARO / OSCURO
-========================================= */
-
-function aplicarTema(tema) {
-    const oscuro = tema === "dark";
-
+function aplicarTema(oscuro) {
     document.body.classList.toggle("dark", oscuro);
 
-    const boton = $("temaBtn");
-    if (boton) {
-        boton.innerHTML = oscuro
-            ? '<span aria-hidden="true">☀️</span>'
-            : '<span aria-hidden="true">🌙</span>';
+    $("temaBtn").textContent = oscuro ? "☀️" : "🌙";
 
-        boton.setAttribute(
-            "aria-label",
-            oscuro ? "Cambiar a tema claro" : "Cambiar a tema oscuro"
-        );
-    }
+    $("temaBtn").setAttribute(
+        "aria-label",
+        oscuro ? "Activar modo claro" : "Activar modo oscuro"
+    );
 
-    const meta = document.querySelector('meta[name="theme-color"]');
-    if (meta) {
-        meta.setAttribute("content", oscuro ? "#0f172a" : "#f1f5f9");
-    }
+    document.querySelector('meta[name="theme-color"]')
+        .setAttribute("content", oscuro ? "#0b1120" : "#f1f5f9");
 }
 
-function configurarTema() {
-    let temaGuardado = null;
+let temaGuardado = null;
+
+try {
+    temaGuardado = localStorage.getItem("tema");
+} catch (error) {
+    console.warn("No se pudo leer el tema guardado.");
+}
+
+aplicarTema(
+    temaGuardado === "dark" ||
+    (temaGuardado === null &&
+        window.matchMedia("(prefers-color-scheme: dark)").matches)
+);
+
+$("temaBtn").addEventListener("click", () => {
+    const oscuro = !document.body.classList.contains("dark");
+
+    aplicarTema(oscuro);
 
     try {
-        temaGuardado = localStorage.getItem("tema");
+        localStorage.setItem("tema", oscuro ? "dark" : "light");
     } catch (error) {
-        console.warn("No se ha podido leer el tema guardado.", error);
+        console.warn("No se pudo guardar la preferencia de tema.");
     }
-
-    aplicarTema(temaGuardado === "dark" ? "dark" : "light");
-
-    const boton = $("temaBtn");
-    if (!boton) return;
-
-    boton.addEventListener("click", () => {
-        const nuevoTema =
-            document.body.classList.contains("dark") ? "light" : "dark";
-
-        aplicarTema(nuevoTema);
-
-        try {
-            localStorage.setItem("tema", nuevoTema);
-        } catch (error) {
-            console.warn("No se ha podido guardar el tema.", error);
-        }
-    });
-}
+});
 
 /* =========================================
-   RELOJ Y FECHA DE INTERNET
+   CONTROLES DEL DIÁLOGO
 ========================================= */
 
-(() => {
-    const fechaElemento = $("relojFecha");
-    const horaElemento = $("relojHora");
-    const estadoElemento = $("relojEstado");
-
-    if (!fechaElemento || !horaElemento || !estadoElemento) return;
-
-    const ZONA_HORARIA = "Europe/Madrid";
-
-    let diferenciaInternet = 0;
-    let sincronizando = false;
-    let ultimaSincronizacion = null;
-
-    function mostrarReloj() {
-        // Si no hay sincronización, utiliza la hora del dispositivo.
-        const ahora = new Date(Date.now() + diferenciaInternet);
-
-        fechaElemento.textContent = new Intl.DateTimeFormat("es-ES", {
-            weekday: "long",
-            day: "numeric",
-            month: "long",
-            year: "numeric",
-            timeZone: ZONA_HORARIA
-        }).format(ahora);
-
-        horaElemento.textContent = new Intl.DateTimeFormat("es-ES", {
-            hour: "2-digit",
-            minute: "2-digit",
-            second: "2-digit",
-            hour12: false,
-            timeZone: ZONA_HORARIA
-        }).format(ahora);
-    }
-
-    async function sincronizarReloj() {
-        if (sincronizando) return;
-        sincronizando = true;
-
-        const inicio = Date.now();
-        const controlador = new AbortController();
-        const timeout = setTimeout(() => controlador.abort(), 8000);
-
-        try {
-            const respuesta = await fetch(
-                "https://worldtimeapi.org/api/timezone/Europe/Madrid",
-                {
-                    cache: "no-store",
-                    signal: controlador.signal
-                }
-            );
-
-            if (!respuesta.ok) {
-                throw new Error("El servicio horario no está disponible.");
-            }
-
-            const datos = await respuesta.json();
-            const final = Date.now();
-            const horaServidor = new Date(datos.datetime).getTime();
-
-            if (!Number.isFinite(horaServidor)) {
-                throw new Error("La respuesta del servicio horario no es válida.");
-            }
-
-            // Compensa aproximadamente la latencia de la petición.
-            const puntoMedio = inicio + (final - inicio) / 2;
-            diferenciaInternet = horaServidor - puntoMedio;
-            ultimaSincronizacion = final;
-
-            estadoElemento.textContent = "✓ Hora sincronizada con Internet";
-            mostrarReloj();
-
-        } catch (error) {
-            console.warn("No se ha podido sincronizar el reloj:", error);
-
-            estadoElemento.textContent = ultimaSincronizacion
-                ? "Sin conexión: usando la última hora sincronizada"
-                : "Sin conexión horaria: usando el reloj del dispositivo";
-
-        } finally {
-            clearTimeout(timeout);
-            sincronizando = false;
-        }
-    }
-
-    mostrarReloj();
-    sincronizarReloj();
-
-    setInterval(mostrarReloj, 1000);
-    setInterval(sincronizarReloj, 5 * 60 * 1000);
-})();
+$("cerrarDetalle").addEventListener("click", cerrarDetalle);
+$("cerrarDetalleBtn").addEventListener("click", cerrarDetalle);
+$("reintentarBtn").addEventListener("click", cargarDatos);
 
 /* =========================================
-   INICIALIZACIÓN
+   INICIO
 ========================================= */
 
-function iniciarCalendario() {
-    mostrarFechaHoy();
-    configurarFiltros();
-    configurarTema();
+mostrarFechaHoy();
 
-    $("mesAnterior")?.addEventListener("click", () => cambiarMes(-1));
-    $("mesSiguiente")?.addEventListener("click", () => cambiarMes(1));
-    $("hoyBtn")?.addEventListener("click", irAlMesActual);
-
-    $("cerrarDetalle")?.addEventListener("click", cerrarDetalle);
-    $("cerrarDetalleBtn")?.addEventListener("click", cerrarDetalle);
-
-    $("detalleDialog")?.addEventListener("click", evento => {
-        if (evento.target === $("detalleDialog")) {
-            cerrarDetalle();
-        }
-    });
-
-    $("reintentarBtn")?.addEventListener("click", cargarDatos);
-
-    // Si la fecha actual no pertenece al curso, empieza en septiembre de 2026.
-    if (!estaDentroDelCurso(añoActual, mesActual)) {
-        mesActual = INICIO_CURSO.mes;
-        añoActual = INICIO_CURSO.año;
-    }
-
-    cargarDatos();
+if (!estaDentroDelCurso(añoActual, mesActual)) {
+    mesActual = 9;
+    añoActual = 2026;
 }
 
-if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", iniciarCalendario);
-} else {
-    iniciarCalendario();
-}
+cargarDatos();
