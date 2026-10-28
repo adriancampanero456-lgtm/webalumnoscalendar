@@ -21,9 +21,9 @@
 16,12,T,Valenciano,Treball llengües (falta explicar)
 18,12,T,Valenciano,Treball llengües (falta explicar)
 
-8,1,L,Valenciano,Llegir a classe llibre lectura 2a avaluació
-11,1,L,Valenciano,Llegir a classe llibre lectura 2a avaluació
-15,1,L,Valenciano,Llegir a classe llibre lectura 2a avaluació
+8,1,R,Valenciano,Llegir a classe llibre lectura 2a avaluació
+11,1,R,Valenciano,Llegir a classe llibre lectura 2a avaluació
+15,1,R,Valenciano,Llegir a classe llibre lectura 2a avaluació
 18,1,E,Valenciano,Prova llibre lectura
 
 8,2,C,Julen Dodero
