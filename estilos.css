@@ -18,48 +18,6 @@
     --cumple: #fde68a;
 }
 
-/* =========================================
-   RELOJ SINCRONIZADO CON INTERNET
-========================================= */
-
-.reloj-internet {
-    padding: 22px 18px;
-    text-align: center;
-    background: var(--superficie);
-    border: 1px solid var(--borde);
-    border-radius: 17px;
-    box-shadow: var(--sombra);
-}
-
-.reloj-internet-fecha {
-    margin: 0 0 5px;
-    color: var(--secundario);
-    font-size: 14px;
-    text-transform: capitalize;
-}
-
-.reloj-internet-hora {
-    margin: 0;
-    color: var(--texto);
-    font-size: clamp(36px, 7vw, 56px);
-    font-weight: 800;
-    line-height: 1.2;
-    letter-spacing: 2px;
-    font-variant-numeric: tabular-nums;
-}
-
-.reloj-internet-estado {
-    margin: 8px 0 0;
-    color: var(--secundario);
-    font-size: 11px;
-}
-
-body.dark .reloj-internet {
-    background: var(--superficie);
-    border-color: var(--borde);
-}
-
-
 body.dark {
     color-scheme: dark;
     --fondo: #0b1120;
@@ -91,8 +49,7 @@ body {
     min-height: 100vh;
     background: var(--fondo);
     color: var(--texto);
-    font-family: system-ui, -apple-system, "Segoe UI",
-        Roboto, Arial, sans-serif;
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
     line-height: 1.5;
     transition: background-color .25s, color .25s;
 }
@@ -112,7 +69,22 @@ button:disabled {
     transform: none !important;
 }
 
-/* CABECERA */
+h1,
+h2,
+p {
+    overflow-wrap: anywhere;
+}
+
+button,
+input,
+textarea,
+select {
+    font-family: inherit;
+}
+
+/* =========================================
+   CABECERA
+========================================= */
 
 .cabecera {
     padding: 30px 20px 25px;
@@ -135,10 +107,6 @@ button:disabled {
     font-size: 11px;
     font-weight: 800;
     letter-spacing: 2px;
-}
-
-h1, h2, p {
-    overflow-wrap: anywhere;
 }
 
 .cabecera h1 {
@@ -181,7 +149,9 @@ h1, h2, p {
     transform: rotate(8deg) scale(1.05);
 }
 
-/* CONTENEDOR */
+/* =========================================
+   CONTENEDOR PRINCIPAL
+========================================= */
 
 .contenedor {
     width: min(96%, 1250px);
@@ -191,14 +161,54 @@ h1, h2, p {
 #contenidoCalendario {
     display: grid;
     gap: 20px;
+    min-width: 0;
 }
 
-/* RESUMEN */
+/* =========================================
+   RELOJ SINCRONIZADO CON INTERNET
+========================================= */
+
+.reloj-internet {
+    margin-bottom: 20px;
+    padding: 22px 18px;
+    text-align: center;
+    background: var(--superficie);
+    border: 1px solid var(--borde);
+    border-radius: 17px;
+    box-shadow: var(--sombra);
+}
+
+.reloj-internet-fecha {
+    margin: 0 0 5px;
+    color: var(--secundario);
+    font-size: 14px;
+    text-transform: capitalize;
+}
+
+.reloj-internet-hora {
+    margin: 0;
+    color: var(--texto);
+    font-size: clamp(36px, 7vw, 56px);
+    font-weight: 800;
+    line-height: 1.2;
+    letter-spacing: 2px;
+    font-variant-numeric: tabular-nums;
+}
+
+.reloj-internet-estado {
+    margin: 8px 0 0;
+    color: var(--secundario);
+    font-size: 11px;
+}
+
+/* =========================================
+   RESUMEN
+========================================= */
 
 .resumen {
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: flex-start;
     gap: 15px;
     padding: 20px;
     background: var(--suave);
@@ -210,6 +220,8 @@ h1, h2, p {
     display: flex;
     align-items: center;
     gap: 14px;
+    min-width: 0;
+    flex-wrap: wrap;
 }
 
 .resumen-icono {
@@ -234,7 +246,24 @@ h1, h2, p {
     font-size: 13px;
 }
 
-/* BOTONES */
+.contador {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 34px;
+    min-height: 34px;
+    padding: 5px 10px;
+    background: var(--superficie);
+    border: 1px solid var(--borde);
+    border-radius: 20px;
+    color: var(--primario);
+    font-size: 15px;
+    font-weight: 750;
+}
+
+/* =========================================
+   BOTONES
+========================================= */
 
 .boton {
     padding: 10px 16px;
@@ -265,11 +294,19 @@ h1, h2, p {
     border-color: var(--borde);
 }
 
-/* PANELES */
+#hoyBtn {
+    display: block;
+    margin: 16px auto 0;
+}
+
+/* =========================================
+   PANELES
+========================================= */
 
 .panel-filtros,
-.zona-calendario,
+.panel-calendario,
 .panel-proximos {
+    min-width: 0;
     padding: 20px;
     background: var(--superficie);
     border: 1px solid var(--borde);
@@ -278,17 +315,15 @@ h1, h2, p {
 }
 
 .seccion-titulo {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 12px;
-    margin-bottom: 16px;
+    margin: 0 0 16px;
+    font-size: 19px;
+    font-weight: 800;
+    letter-spacing: -.4px;
 }
 
 .seccion-titulo h2 {
     margin: 0;
     font-size: 19px;
-    letter-spacing: -.4px;
 }
 
 .seccion-titulo p {
@@ -297,17 +332,9 @@ h1, h2, p {
     font-size: 13px;
 }
 
-.contador {
-    flex: 0 0 auto;
-    padding: 5px 10px;
-    background: var(--suave);
-    border-radius: 20px;
-    color: var(--primario);
-    font-size: 12px;
-    font-weight: 750;
-}
-
-/* FILTROS */
+/* =========================================
+   FILTROS
+========================================= */
 
 .menu {
     display: flex;
@@ -320,6 +347,7 @@ h1, h2, p {
     align-items: center;
     justify-content: center;
     gap: 7px;
+    min-height: 36px;
     padding: 9px 13px;
     border: 1px solid var(--borde);
     border-radius: 10px;
@@ -341,6 +369,10 @@ h1, h2, p {
     color: #ffffff;
 }
 
+.filtro.activo .punto {
+    background: #ffffff;
+}
+
 .punto {
     width: 9px;
     height: 9px;
@@ -354,37 +386,52 @@ h1, h2, p {
 .punto.O { background: #c084fc; }
 .punto.C { background: #fbbf24; }
 
-/* NAVEGACIÓN DEL MES */
+/* =========================================
+   DISTRIBUCIÓN CALENDARIO Y PRÓXIMOS
+========================================= */
+
+.zona-calendario {
+    display: grid;
+    grid-template-columns: minmax(0, 1.7fr) minmax(260px, 1fr);
+    align-items: start;
+    gap: 20px;
+}
+
+.panel-calendario,
+.panel-proximos {
+    width: 100%;
+}
+
+.panel-calendario {
+    overflow: hidden;
+}
+
+/* =========================================
+   NAVEGACIÓN DEL MES
+========================================= */
 
 .mes-control {
     display: grid;
-    grid-template-columns: 44px 1fr 44px;
+    grid-template-columns: 42px minmax(0, 1fr) 42px;
     align-items: center;
     gap: 12px;
     margin-bottom: 22px;
 }
 
 .mes-titulo {
-    text-align: center;
-}
-
-.mes-titulo h2 {
     margin: 0;
+    text-align: center;
     font-size: clamp(21px, 3vw, 27px);
     font-weight: 800;
     letter-spacing: -.7px;
     text-transform: capitalize;
 }
 
-.mes-titulo p {
-    margin: 3px 0 0;
-    color: var(--secundario);
-    font-size: 12px;
-}
-
 .flecha {
     width: 42px;
     height: 42px;
+    display: grid;
+    place-items: center;
     border: 1px solid var(--borde);
     border-radius: 12px;
     background: var(--superficie);
@@ -401,7 +448,9 @@ h1, h2, p {
     color: #ffffff;
 }
 
-/* DÍAS DE LA SEMANA */
+/* =========================================
+   DÍAS DE LA SEMANA
+========================================= */
 
 .dias-semana {
     display: grid;
@@ -410,27 +459,32 @@ h1, h2, p {
     margin-bottom: 7px;
 }
 
-.dias-semana div {
+.dias-semana span {
+    display: block;
     padding: 8px 0;
-    text-align: center;
     color: var(--secundario);
     font-size: 12px;
     font-weight: 800;
+    text-align: center;
 }
 
-/* CALENDARIO */
+/* =========================================
+   CALENDARIO
+========================================= */
 
 .calendario {
     display: grid;
     grid-template-columns: repeat(7, minmax(0, 1fr));
     grid-template-rows: repeat(6, minmax(105px, auto));
     gap: 6px;
+    min-width: 0;
 }
 
 .dia {
     min-width: 0;
     min-height: 105px;
     padding: 8px;
+    overflow: hidden;
     border: 1px solid var(--borde);
     border-radius: 11px;
     background: var(--superficie);
@@ -444,6 +498,7 @@ h1, h2, p {
 .dia.vacio {
     background: var(--fondo);
     border-color: transparent;
+    pointer-events: none;
 }
 
 .numero-dia {
@@ -468,7 +523,9 @@ h1, h2, p {
     color: #ffffff;
 }
 
-/* EVENTOS */
+/* =========================================
+   EVENTOS DEL CALENDARIO
+========================================= */
 
 .evento {
     display: block;
@@ -476,6 +533,7 @@ h1, h2, p {
     min-width: 0;
     margin-top: 5px;
     padding: 5px 6px;
+    overflow: hidden;
     border: 0;
     border-left: 3px solid transparent;
     border-radius: 5px;
@@ -496,6 +554,7 @@ h1, h2, p {
 .evento strong,
 .evento span {
     display: block;
+    overflow-wrap: anywhere;
 }
 
 .evento strong {
@@ -509,24 +568,38 @@ h1, h2, p {
     font-size: 10px;
 }
 
-.evento.E { background: var(--examen); border-left-color: #dc2626; }
-.evento.T { background: var(--trabajo); border-left-color: #2563eb; }
-.evento.R { background: var(--lectura); border-left-color: #16a34a; }
-.evento.O { background: var(--exposicion); border-left-color: #9333ea; }
-.evento.C { background: var(--cumple); border-left-color: #d97706; }
-
-.ayuda-calendario {
-    margin: 14px 0 0;
-    color: var(--secundario);
-    font-size: 12px;
-    text-align: center;
+.evento.E {
+    background: var(--examen);
+    border-left-color: #dc2626;
 }
 
-/* PRÓXIMOS EVENTOS */
+.evento.T {
+    background: var(--trabajo);
+    border-left-color: #2563eb;
+}
+
+.evento.R {
+    background: var(--lectura);
+    border-left-color: #16a34a;
+}
+
+.evento.O {
+    background: var(--exposicion);
+    border-left-color: #9333ea;
+}
+
+.evento.C {
+    background: var(--cumple);
+    border-left-color: #d97706;
+}
+
+/* =========================================
+   PRÓXIMOS EVENTOS
+========================================= */
 
 .lista-proximos {
     display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-columns: 1fr;
     gap: 10px;
 }
 
@@ -534,11 +607,22 @@ h1, h2, p {
     display: flex;
     align-items: stretch;
     gap: 12px;
+    width: 100%;
+    min-width: 0;
     padding: 13px;
     border: 1px solid var(--borde);
     border-radius: 12px;
     background: var(--superficie);
+    color: var(--texto);
+    font: inherit;
+    text-align: left;
     cursor: pointer;
+    transition: border-color .2s, background .2s, transform .2s;
+}
+
+.proximo-evento:hover {
+    border-color: var(--primario);
+    transform: translateY(-1px);
 }
 
 .proximo-evento:focus-visible {
@@ -547,39 +631,40 @@ h1, h2, p {
 }
 
 .proximo-fecha {
-    min-width: 52px;
     display: flex;
+    flex: 0 0 60px;
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    min-width: 60px;
+    min-height: 55px;
     padding: 7px;
     background: var(--suave);
     border-radius: 9px;
     color: var(--primario);
-}
-
-.proximo-fecha strong {
-    font-size: 22px;
-    line-height: 1.2;
-}
-
-.proximo-fecha span {
-    font-size: 10px;
-    font-weight: 800;
-    text-transform: uppercase;
+    font-size: 12px;
+    font-weight: 750;
+    text-align: center;
+    text-transform: capitalize;
 }
 
 .proximo-info {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    justify-content: center;
+    gap: 4px;
     min-width: 0;
 }
 
 .proximo-info strong {
     display: block;
+    color: var(--texto);
     font-size: 13px;
 }
 
-.proximo-info p {
-    margin: 4px 0 0;
+.proximo-info > span {
+    display: block;
     color: var(--secundario);
     font-size: 12px;
     overflow-wrap: anywhere;
@@ -591,21 +676,15 @@ h1, h2, p {
 .proximo-evento.O { border-left: 4px solid #c084fc; }
 .proximo-evento.C { border-left: 4px solid #fbbf24; }
 
-.sin-eventos {
-    grid-column: 1 / -1;
-    padding: 25px 15px;
-    border: 1px dashed var(--borde);
-    border-radius: 12px;
-    color: var(--secundario);
-    font-size: 13px;
-    text-align: center;
-}
-
-/* DETALLE */
+/* =========================================
+   DIÁLOGO DE DETALLES
+========================================= */
 
 .detalle-dialog {
     width: min(92%, 440px);
+    max-height: 85vh;
     padding: 25px;
+    overflow-y: auto;
     border: 1px solid var(--borde);
     border-radius: 18px;
     background: var(--superficie);
@@ -626,6 +705,8 @@ h1, h2, p {
 }
 
 .etiqueta {
+    display: inline-flex;
+    align-items: center;
     padding: 5px 10px;
     border-radius: 20px;
     background: var(--suave);
@@ -634,21 +715,29 @@ h1, h2, p {
     font-weight: 800;
 }
 
-.etiqueta.categoria-E { background: var(--examen); color: #7f1d1d; }
-.etiqueta.categoria-T { background: var(--trabajo); color: #1e3a8a; }
-.etiqueta.categoria-R { background: var(--lectura); color: #14532d; }
-.etiqueta.categoria-O { background: var(--exposicion); color: #581c87; }
-.etiqueta.categoria-C { background: var(--cumple); color: #78350f; }
+.etiqueta.E {
+    background: var(--examen);
+    color: #7f1d1d;
+}
 
-.cerrar-dialogo {
-    width: 35px;
-    height: 35px;
-    border: 1px solid var(--borde);
-    border-radius: 10px;
-    background: var(--fondo);
-    color: var(--texto);
-    font-size: 23px;
-    cursor: pointer;
+.etiqueta.T {
+    background: var(--trabajo);
+    color: #1e3a8a;
+}
+
+.etiqueta.R {
+    background: var(--lectura);
+    color: #14532d;
+}
+
+.etiqueta.O {
+    background: var(--exposicion);
+    color: #581c87;
+}
+
+.etiqueta.C {
+    background: var(--cumple);
+    color: #78350f;
 }
 
 .detalle-fecha {
@@ -669,14 +758,22 @@ h1, h2, p {
     white-space: pre-wrap;
 }
 
-/* ERROR */
+.detalle-acciones {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 18px;
+}
+
+/* =========================================
+   MENSAJE DE ERROR
+========================================= */
 
 .error-db {
     display: flex;
     align-items: flex-start;
     gap: 18px;
     max-width: 760px;
-    margin: 55px auto;
+    margin: 35px auto;
     padding: 25px;
     border: 1px solid #fecaca;
     border-radius: 16px;
@@ -707,20 +804,42 @@ h1, h2, p {
     font-size: 13px;
 }
 
-/* PIE */
+/* =========================================
+   PIE DE PÁGINA
+========================================= */
 
 .pie {
-    padding: 8px;
+    padding: 8px 15px 20px;
     color: var(--secundario);
     font-size: 12px;
     text-align: center;
 }
 
-/* TABLETS Y MÓVILES */
+/* =========================================
+   TABLETS
+========================================= */
+
+@media (max-width: 950px) {
+    .zona-calendario {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .lista-proximos {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+/* =========================================
+   MÓVILES
+========================================= */
 
 @media (max-width: 760px) {
     .cabecera {
         padding: 22px 16px;
+    }
+
+    .cabecera-contenido {
+        gap: 12px;
     }
 
     .contenedor {
@@ -730,6 +849,16 @@ h1, h2, p {
 
     #contenidoCalendario {
         gap: 13px;
+    }
+
+    .reloj-internet {
+        margin-bottom: 14px;
+        padding: 18px 12px;
+    }
+
+    .reloj-internet-hora {
+        font-size: clamp(34px, 10vw, 48px);
+        letter-spacing: 1px;
     }
 
     .resumen {
@@ -752,13 +881,8 @@ h1, h2, p {
         font-size: 12px;
     }
 
-    .resumen .boton {
-        padding: 8px 10px;
-        white-space: nowrap;
-    }
-
     .panel-filtros,
-    .zona-calendario,
+    .panel-calendario,
     .panel-proximos {
         padding: 12px;
         border-radius: 13px;
@@ -778,7 +902,7 @@ h1, h2, p {
         gap: 3px;
     }
 
-    .dias-semana div {
+    .dias-semana span {
         padding: 5px 0;
         font-size: 10px;
     }
@@ -817,18 +941,35 @@ h1, h2, p {
     }
 
     .mes-control {
+        grid-template-columns: 36px minmax(0, 1fr) 36px;
+        gap: 6px;
         margin-bottom: 13px;
     }
 
     .flecha {
         width: 36px;
         height: 36px;
+        font-size: 23px;
     }
 
     .contador {
-        font-size: 10px;
+        font-size: 12px;
+    }
+
+    .detalle-dialog {
+        padding: 20px;
+    }
+
+    .error-db {
+        gap: 12px;
+        margin: 20px auto;
+        padding: 16px;
     }
 }
+
+/* =========================================
+   MÓVILES PEQUEÑOS
+========================================= */
 
 @media (max-width: 390px) {
     .cabecera h1 {
@@ -837,6 +978,10 @@ h1, h2, p {
 
     .sobretitulo {
         font-size: 9px;
+    }
+
+    .subtitulo {
+        font-size: 13px;
     }
 
     .tema-btn {
@@ -867,9 +1012,21 @@ h1, h2, p {
     .evento span {
         font-size: 8px;
     }
+
+    .proximo-evento {
+        gap: 8px;
+        padding: 10px;
+    }
+
+    .proximo-fecha {
+        flex-basis: 52px;
+        min-width: 52px;
+    }
 }
 
-/* ACCESIBILIDAD */
+/* =========================================
+   ACCESIBILIDAD
+========================================= */
 
 @media (prefers-reduced-motion: reduce) {
     *,
@@ -877,6 +1034,7 @@ h1, h2, p {
     *::after {
         scroll-behavior: auto !important;
         animation-duration: .01ms !important;
+        animation-iteration-count: 1 !important;
         transition-duration: .01ms !important;
     }
 }
