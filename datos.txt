@@ -3,6 +3,7 @@
 30,10,E,Biología,Examen Tema 1.2
 
 2,11,E,EEV,Examen Tema 1
+3,11,E,TEST,TEST
 12,11,E,Inglés,Speaking Unit 2 (In Class)
 16,11,T,Inglés,Writing Unit 2 Deadline
 18,11,E,Inglés,Unit 2 Test
