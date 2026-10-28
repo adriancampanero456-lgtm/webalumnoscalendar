@@ -1,8 +1,4 @@
 
-/* =========================================
-   CALENDARIO ESCOLAR - DISEÑO
-========================================= */
-
 :root {
     color-scheme: light;
     --fondo: #f1f5f9;
@@ -54,7 +50,7 @@ body {
     background: var(--fondo);
     color: var(--texto);
     font-family: system-ui, -apple-system, "Segoe UI",
-                 Roboto, Arial, sans-serif;
+        Roboto, Arial, sans-serif;
     line-height: 1.5;
     transition: background-color .25s, color .25s;
 }
@@ -74,9 +70,7 @@ button:disabled {
     transform: none !important;
 }
 
-/* =========================================
-   CABECERA
-========================================= */
+/* CABECERA */
 
 .cabecera {
     padding: 30px 20px 25px;
@@ -145,9 +139,7 @@ h1, h2, p {
     transform: rotate(8deg) scale(1.05);
 }
 
-/* =========================================
-   CONTENEDOR
-========================================= */
+/* CONTENEDOR */
 
 .contenedor {
     width: min(96%, 1250px);
@@ -159,9 +151,7 @@ h1, h2, p {
     gap: 20px;
 }
 
-/* =========================================
-   RESUMEN
-========================================= */
+/* RESUMEN */
 
 .resumen {
     display: flex;
@@ -202,9 +192,7 @@ h1, h2, p {
     font-size: 13px;
 }
 
-/* =========================================
-   BOTONES GENERALES
-========================================= */
+/* BOTONES */
 
 .boton {
     padding: 10px 16px;
@@ -235,9 +223,7 @@ h1, h2, p {
     border-color: var(--borde);
 }
 
-/* =========================================
-   PANELES
-========================================= */
+/* PANELES */
 
 .panel-filtros,
 .zona-calendario,
@@ -279,9 +265,7 @@ h1, h2, p {
     font-weight: 750;
 }
 
-/* =========================================
-   FILTROS
-========================================= */
+/* FILTROS */
 
 .menu {
     display: flex;
@@ -328,9 +312,7 @@ h1, h2, p {
 .punto.O { background: #c084fc; }
 .punto.C { background: #fbbf24; }
 
-/* =========================================
-   NAVEGACIÓN DEL MES
-========================================= */
+/* NAVEGACIÓN DEL MES */
 
 .mes-control {
     display: grid;
@@ -377,9 +359,7 @@ h1, h2, p {
     color: #ffffff;
 }
 
-/* =========================================
-   DÍAS DE LA SEMANA
-========================================= */
+/* DÍAS DE LA SEMANA */
 
 .dias-semana {
     display: grid;
@@ -396,9 +376,7 @@ h1, h2, p {
     font-weight: 800;
 }
 
-/* =========================================
-   CALENDARIO
-========================================= */
+/* CALENDARIO */
 
 .calendario {
     display: grid;
@@ -448,14 +426,7 @@ h1, h2, p {
     color: #ffffff;
 }
 
-.dia.seleccionado {
-    background: var(--suave);
-    border-color: var(--primario);
-}
-
-/* =========================================
-   EVENTOS
-========================================= */
+/* EVENTOS */
 
 .evento {
     display: block;
@@ -509,9 +480,7 @@ h1, h2, p {
     text-align: center;
 }
 
-/* =========================================
-   PRÓXIMOS EVENTOS
-========================================= */
+/* PRÓXIMOS EVENTOS */
 
 .lista-proximos {
     display: grid;
@@ -527,6 +496,12 @@ h1, h2, p {
     border: 1px solid var(--borde);
     border-radius: 12px;
     background: var(--superficie);
+    cursor: pointer;
+}
+
+.proximo-evento:focus-visible {
+    outline: 3px solid var(--primario);
+    outline-offset: 3px;
 }
 
 .proximo-fecha {
@@ -584,9 +559,7 @@ h1, h2, p {
     text-align: center;
 }
 
-/* =========================================
-   DETALLE DEL EVENTO
-========================================= */
+/* DETALLE */
 
 .detalle-dialog {
     width: min(92%, 440px);
@@ -619,6 +592,12 @@ h1, h2, p {
     font-weight: 800;
 }
 
+.etiqueta.categoria-E { background: var(--examen); color: #7f1d1d; }
+.etiqueta.categoria-T { background: var(--trabajo); color: #1e3a8a; }
+.etiqueta.categoria-R { background: var(--lectura); color: #14532d; }
+.etiqueta.categoria-O { background: var(--exposicion); color: #581c87; }
+.etiqueta.categoria-C { background: var(--cumple); color: #78350f; }
+
 .cerrar-dialogo {
     width: 35px;
     height: 35px;
@@ -648,9 +627,7 @@ h1, h2, p {
     white-space: pre-wrap;
 }
 
-/* =========================================
-   ERROR
-========================================= */
+/* ERROR */
 
 .error-db {
     display: flex;
@@ -688,9 +665,7 @@ h1, h2, p {
     font-size: 13px;
 }
 
-/* =========================================
-   PIE DE PÁGINA
-========================================= */
+/* PIE */
 
 .pie {
     padding: 8px;
@@ -699,9 +674,7 @@ h1, h2, p {
     text-align: center;
 }
 
-/* =========================================
-   MÓVILES Y TABLETS
-========================================= */
+/* TABLETS Y MÓVILES */
 
 @media (max-width: 760px) {
     .cabecera {
@@ -792,10 +765,7 @@ h1, h2, p {
         line-height: 1.15;
     }
 
-    .evento strong {
-        font-size: 9px;
-    }
-
+    .evento strong,
     .evento span {
         font-size: 9px;
     }
@@ -851,16 +821,13 @@ h1, h2, p {
         font-size: 9px;
     }
 
-    .evento strong {
-        font-size: 8px;
-    }
-
+    .evento strong,
     .evento span {
         font-size: 8px;
     }
 }
 
-/* Reducir movimiento si el usuario lo prefiere */
+/* ACCESIBILIDAD */
 
 @media (prefers-reduced-motion: reduce) {
     *,
