@@ -5,9 +5,6 @@
    CONFIGURACIÓN
 ========================================= */
 
-const INICIO_CURSO = { mes: 9, año: 2026 };
-const FIN_CURSO = { mes: 6, año: 2027 };
-
 const CATEGORIAS = {
     E: "Exámenes",
     T: "Trabajos",
@@ -27,33 +24,28 @@ const DIAS = [
     "jueves", "viernes", "sábado"
 ];
 
-/* =========================================
-   ESTADO
-========================================= */
+const INICIO_CURSO = { mes: 9, año: 2026 };
+const FIN_CURSO = { mes: 6, año: 2027 };
 
 let eventos = [];
 let filtroActual = "ALL";
 
-const ahora = new Date();
-
-let mesActual = ahora.getMonth() + 1;
-let añoActual = ahora.getFullYear();
-
 const $ = id => document.getElementById(id);
+
+const fechaInicial = new Date();
+let mesActual = fechaInicial.getMonth() + 1;
+let añoActual = fechaInicial.getFullYear();
 
 /* =========================================
    FECHAS
 ========================================= */
 
-function compararMeses(año1, mes1, año2, mes2) {
-    return año1 * 12 + mes1 - (año2 * 12 + mes2);
-}
-
 function estaDentroDelCurso(año, mes) {
-    return (
-        compararMeses(año, mes, 2026, 9) >= 0 &&
-        compararMeses(año, mes, 2027, 6) <= 0
-    );
+    const valor = año * 12 + mes;
+    const inicio = INICIO_CURSO.año * 12 + INICIO_CURSO.mes;
+    const fin = FIN_CURSO.año * 12 + FIN_CURSO.mes;
+
+    return valor >= inicio && valor <= fin;
 }
 
 function diasDelMes(mes, año) {
@@ -61,7 +53,9 @@ function diasDelMes(mes, año) {
 }
 
 function fechaEvento(evento) {
+    // El formato de datos.txt no incluye año.
     const año = evento.mes >= 9 ? 2026 : 2027;
+
     return new Date(año, evento.mes - 1, evento.dia);
 }
 
@@ -76,9 +70,13 @@ function mostrarFechaHoy() {
 }
 
 /* =========================================
-   CARGA DE DATOS
-   Formato:
+   CARGAR DATOS.TXT
+
+   Eventos normales:
    dia,mes,categoria,asignatura,descripcion
+
+   Cumpleaños:
+   dia,mes,C,persona
 ========================================= */
 
 async function cargarDatos() {
@@ -109,38 +107,34 @@ async function cargarDatos() {
         for (let i = 0; i < lineas.length; i++) {
             const linea = lineas[i].trim();
 
-            if (!linea) continue;
-
-            const partes = linea.split(",");
-
-            if (partes.length < 5) {
-                throw new Error(
-                    `La línea ${i + 1} no tiene todos los campos.`
-                );
+            // Ignorar líneas vacías y comentarios.
+            if (!linea || linea.startsWith("#")) {
+                continue;
             }
 
-            const diaTexto = partes[0].trim();
-            const mesTexto = partes[1].trim();
-            const categoria = partes[2].trim().toUpperCase();
-            const asignatura = partes[3].trim();
-            const descripcion = partes.slice(4).join(",").trim();
+            const partes = linea.split(",").map(p => p.trim());
 
-            if (!/^\d+$/.test(diaTexto) ||
-                !/^\d+$/.test(mesTexto)) {
+            const diaTexto = partes[0];
+            const mesTexto = partes[1];
+            const categoria = (partes[2] || "").toUpperCase();
+
+            if (
+                !/^\d+$/.test(diaTexto || "") ||
+                !/^\d+$/.test(mesTexto || "")
+            ) {
                 throw new Error(
-                    `Fecha incorrecta en la línea ${i + 1}.`
+                    `Fecha incorrecta en la línea ${i + 1}: ${linea}`
                 );
             }
 
             const dia = Number(diaTexto);
             const mes = Number(mesTexto);
-            const año = mes >= 9 ? 2026 : 2027;
 
             if (mes < 1 || mes > 12) {
-                throw new Error(
-                    `Mes incorrecto en la línea ${i + 1}.`
-                );
+                throw new Error(`Mes incorrecto en la línea ${i + 1}.`);
             }
+
+            const año = mes >= 9 ? 2026 : 2027;
 
             if (
                 !estaDentroDelCurso(año, mes) ||
@@ -148,19 +142,51 @@ async function cargarDatos() {
                 dia > diasDelMes(mes, año)
             ) {
                 throw new Error(
-                    `Fecha fuera del curso o inexistente en la línea ${i + 1}.`
+                    `Fecha inexistente o fuera del curso en la línea ${i + 1}.`
                 );
             }
 
             if (!Object.hasOwn(CATEGORIAS, categoria)) {
                 throw new Error(
-                    `Categoría "${categoria}" desconocida en la línea ${i + 1}.`
+                    `Categoría desconocida en la línea ${i + 1}: ${categoria}`
                 );
             }
 
-            if (!asignatura || !descripcion) {
+            let asignatura;
+            let descripcion;
+
+            if (categoria === "C") {
+                // Cumpleaños: cuatro campos.
+                if (partes.length !== 4) {
+                    throw new Error(
+                        `El cumpleaños de la línea ${i + 1} debe tener 4 campos: dia,mes,C,persona.`
+                    );
+                }
+
+                asignatura = partes[3];
+                descripcion = "Cumpleaños";
+
+            } else {
+                // Resto de eventos: cinco campos o más.
+                if (partes.length < 5) {
+                    throw new Error(
+                        `El evento de la línea ${i + 1} necesita 5 campos: dia,mes,categoria,asignatura,descripcion.`
+                    );
+                }
+
+                asignatura = partes[3];
+                descripcion = partes.slice(4).join(",").trim();
+            }
+
+            if (!asignatura) {
                 throw new Error(
-                    `Falta asignatura o descripción en la línea ${i + 1}.`
+                    `Falta el nombre o asignatura en la línea ${i + 1}.`
+                );
+            }
+
+            if (categoria !== "C" && !descripcion) {
+                throw new Error(
+                    `Falta la descripción en la línea ${i + 1}.`
                 );
             }
 
@@ -191,7 +217,7 @@ async function cargarDatos() {
         $("errorDB").hidden = false;
 
         $("mensajeError").textContent =
-            `${error.message} Comprueba el archivo y vuelve a intentarlo.`;
+            `${error.message} Comprueba datos.txt y vuelve a intentarlo.`;
 
     } finally {
         $("reintentarBtn").disabled = false;
@@ -199,7 +225,7 @@ async function cargarDatos() {
 }
 
 /* =========================================
-   ACTUALIZAR LA VISTA
+   ACTUALIZAR VISTA
 ========================================= */
 
 function eventosFiltrados() {
@@ -214,16 +240,10 @@ function actualizarVista() {
         `${MESES[mesActual - 1]} ${añoActual}`;
 
     $("mesAnterior").disabled =
-        !estaDentroDelCurso(
-            añoActual,
-            mesActual - 1
-        );
+        !estaDentroDelCurso(añoActual, mesActual - 1);
 
     $("mesSiguiente").disabled =
-        !estaDentroDelCurso(
-            añoActual,
-            mesActual + 1
-        );
+        !estaDentroDelCurso(añoActual, mesActual + 1);
 
     document.querySelectorAll("[data-filtro]").forEach(boton => {
         const activo = boton.dataset.filtro === filtroActual;
@@ -232,10 +252,10 @@ function actualizarVista() {
         boton.setAttribute("aria-pressed", String(activo));
     });
 
+    const cantidad = eventosFiltrados().length;
+
     $("contadorEventos").textContent =
-        `${eventosFiltrados().length} ${
-            eventosFiltrados().length === 1 ? "evento" : "eventos"
-        }`;
+        `${cantidad} ${cantidad === 1 ? "evento" : "eventos"}`;
 
     generarCalendario();
     generarProximos();
@@ -257,18 +277,14 @@ function generarCalendario() {
         1
     ).getDay();
 
-    // Convertir domingo = 0 a lunes = 0.
+    // Lunes = 0, domingo = 6.
     const desplazamiento = (primerDia + 6) % 7;
     const totalDias = diasDelMes(mesActual, añoActual);
 
     const hoy = new Date();
     hoy.setHours(0, 0, 0, 0);
 
-    const seleccionada = new Date(
-        añoActual,
-        mesActual - 1,
-        1
-    );
+    const lista = eventosFiltrados();
 
     for (let posicion = 0; posicion < 42; posicion++) {
         const numeroDia = posicion - desplazamiento + 1;
@@ -289,9 +305,7 @@ function generarCalendario() {
             numeroDia
         );
 
-        const esHoy = fecha.getTime() === hoy.getTime();
-
-        if (esHoy) {
+        if (fecha.getTime() === hoy.getTime()) {
             celda.classList.add("hoy");
         }
 
@@ -299,14 +313,9 @@ function generarCalendario() {
         numero.className = "numero-dia";
         numero.textContent = numeroDia;
 
-        if (esHoy) {
-            numero.setAttribute("aria-label", "Hoy");
-            numero.title = "Hoy";
-        }
-
         celda.appendChild(numero);
 
-        const eventosDia = eventosFiltrados().filter(evento =>
+        const eventosDia = lista.filter(evento =>
             evento.dia === numeroDia &&
             evento.mes === mesActual
         );
@@ -322,14 +331,17 @@ function generarCalendario() {
                 `${CATEGORIAS[evento.categoria]}: ${evento.asignatura}. ${evento.descripcion}`
             );
 
-            const asignatura = document.createElement("strong");
-            asignatura.textContent = evento.asignatura;
+            const nombre = document.createElement("strong");
+            nombre.textContent = evento.asignatura;
 
             const descripcion = document.createElement("span");
             descripcion.textContent = evento.descripcion;
 
-            boton.append(asignatura, descripcion);
-            boton.addEventListener("click", () => mostrarDetalle(evento));
+            boton.append(nombre, descripcion);
+
+            boton.addEventListener("click", () => {
+                mostrarDetalle(evento);
+            });
 
             celda.appendChild(boton);
         });
@@ -354,8 +366,13 @@ function mostrarDetalle(evento) {
     $("detalleFecha").textContent =
         formatoFecha(fechaEvento(evento));
 
-    $("detalleAsignatura").textContent = evento.asignatura;
-    $("detalleDescripcion").textContent = evento.descripcion;
+    $("detalleAsignatura").textContent =
+        evento.categoria === "C"
+            ? `🎂 ${evento.asignatura}`
+            : evento.asignatura;
+
+    $("detalleDescripcion").textContent =
+        evento.descripcion;
 
     $("detalleDialog").showModal();
 }
@@ -371,6 +388,7 @@ function cerrarDetalle() {
 function generarProximos() {
     const lista = $("listaProximos");
     const hoy = new Date();
+
     hoy.setHours(0, 0, 0, 0);
 
     const proximos = eventosFiltrados()
@@ -386,17 +404,28 @@ function generarProximos() {
 
     if (proximos.length === 0) {
         const mensaje = document.createElement("p");
+
         mensaje.className = "sin-eventos";
         mensaje.textContent =
             "No hay próximos eventos para esta categoría.";
+
         lista.appendChild(mensaje);
         return;
     }
 
     proximos.forEach(({ evento, fecha }) => {
         const tarjeta = document.createElement("article");
+
         tarjeta.className =
             `proximo-evento ${evento.categoria}`;
+
+        tarjeta.tabIndex = 0;
+        tarjeta.setAttribute("role", "button");
+
+        tarjeta.setAttribute(
+            "aria-label",
+            `${formatoFecha(fecha)}: ${evento.asignatura}`
+        );
 
         const fechaCaja = document.createElement("div");
         fechaCaja.className = "proximo-fecha";
@@ -413,7 +442,10 @@ function generarProximos() {
         info.className = "proximo-info";
 
         const asignatura = document.createElement("strong");
-        asignatura.textContent = evento.asignatura;
+        asignatura.textContent =
+            evento.categoria === "C"
+                ? `🎂 ${evento.asignatura}`
+                : evento.asignatura;
 
         const descripcion = document.createElement("p");
         descripcion.textContent = evento.descripcion;
@@ -424,17 +456,13 @@ function generarProximos() {
         info.append(asignatura, descripcion, fechaTexto);
         tarjeta.append(fechaCaja, info);
 
-        tarjeta.tabIndex = 0;
-        tarjeta.setAttribute(
-            "aria-label",
-            `${formatoFecha(fecha)}: ${evento.asignatura}`
-        );
-
         tarjeta.addEventListener("click", () => {
             mesActual = fecha.getMonth() + 1;
             añoActual = fecha.getFullYear();
+
             actualizarVista();
             mostrarDetalle(evento);
+
             $("mesActual").scrollIntoView({
                 behavior: "smooth",
                 block: "center"
@@ -464,7 +492,7 @@ document.querySelectorAll("[data-filtro]").forEach(boton => {
 });
 
 /* =========================================
-   NAVEGACIÓN ENTRE MESES
+   CAMBIAR MES
 ========================================= */
 
 function cambiarMes(direccion) {
@@ -492,10 +520,12 @@ $("mesSiguiente").addEventListener("click", () => cambiarMes(1));
 
 $("hoyBtn").addEventListener("click", () => {
     const hoy = new Date();
+    const mes = hoy.getMonth() + 1;
+    const año = hoy.getFullYear();
 
-    if (estaDentroDelCurso(hoy.getFullYear(), hoy.getMonth() + 1)) {
-        mesActual = hoy.getMonth() + 1;
-        añoActual = hoy.getFullYear();
+    if (estaDentroDelCurso(año, mes)) {
+        mesActual = mes;
+        añoActual = año;
     } else {
         mesActual = 9;
         añoActual = 2026;
@@ -519,7 +549,10 @@ function aplicarTema(oscuro) {
     );
 
     document.querySelector('meta[name="theme-color"]')
-        .setAttribute("content", oscuro ? "#0b1120" : "#f1f5f9");
+        .setAttribute(
+            "content",
+            oscuro ? "#0b1120" : "#f1f5f9"
+        );
 }
 
 let temaGuardado = null;
@@ -532,8 +565,10 @@ try {
 
 aplicarTema(
     temaGuardado === "dark" ||
-    (temaGuardado === null &&
-        window.matchMedia("(prefers-color-scheme: dark)").matches)
+    (
+        temaGuardado === null &&
+        window.matchMedia("(prefers-color-scheme: dark)").matches
+    )
 );
 
 $("temaBtn").addEventListener("click", () => {
@@ -544,12 +579,12 @@ $("temaBtn").addEventListener("click", () => {
     try {
         localStorage.setItem("tema", oscuro ? "dark" : "light");
     } catch (error) {
-        console.warn("No se pudo guardar la preferencia de tema.");
+        console.warn("No se pudo guardar el tema.");
     }
 });
 
 /* =========================================
-   CONTROLES DEL DIÁLOGO
+   CONTROLES
 ========================================= */
 
 $("cerrarDetalle").addEventListener("click", cerrarDetalle);
