@@ -4,175 +4,123 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="theme-color" content="#f1f5f9">
-    <meta name="description" content="Calendario compartido de 4.º ESO para el curso 2026-2027.">
-
-    <title>Calendario de clase | 4.º ESO 2026-2027</title>
-
+    <title>Calendario de clase · 4.º ESO</title>
     <link rel="stylesheet" href="estilos.css">
-    <link rel="icon" type="image/jpeg" href="favicon1.jpg">
     <script src="script.js" defer></script>
 </head>
-
 <body>
     <header class="cabecera">
         <div class="cabecera-contenido">
             <div>
-                <p class="sobretitulo">AGENDA ESCOLAR</p>
+                <p class="sobretitulo">CURSO 2026–2027</p>
                 <h1>Calendario de clase</h1>
-                <p class="subtitulo">4.º ESO · Curso 2026-2027</p>
-                <p id="hoy" class="fecha-hoy"></p>
+                <p class="subtitulo">Exámenes, trabajos, entregas y eventos</p>
             </div>
 
-            <button id="temaBtn" class="tema-btn"
-                    type="button"
-                    aria-label="Activar modo oscuro"
-                    title="Cambiar tema">
-                🌙
+            <button id="boton-tema" class="boton-secundario" type="button">
+                🌙 Tema oscuro
             </button>
         </div>
     </header>
 
     <main class="contenedor">
-        <section id="errorDB" class="error-db" role="alert" hidden>
-            <span class="error-icono" aria-hidden="true">!</span>
-            <div>
-                <h2>No se pudo cargar el calendario</h2>
-                <p id="mensajeError">
-                    Comprueba que el archivo datos.txt existe y que la web
-                    se está abriendo desde un servidor.
-                </p>
-                <button id="reintentarBtn" type="button"
-                        class="boton boton-principal">
-                    Reintentar
-                </button>
+        <!-- RELOJ DE INTERNET -->
+        <section class="reloj-tarjeta" aria-label="Fecha y hora actuales">
+            <div id="fecha-internet">Sincronizando con Internet...</div>
+            <div id="hora-internet" aria-live="off">--:--:--</div>
+            <div id="estado-reloj">Conectando con el servidor horario...</div>
+        </section>
+
+        <section class="barra-mes">
+            <button id="mes-anterior" class="boton-flecha"
+                type="button" aria-label="Mes anterior">‹</button>
+
+            <h2 id="titulo-mes">Calendario</h2>
+
+            <button id="mes-siguiente" class="boton-flecha"
+                type="button" aria-label="Mes siguiente">›</button>
+        </section>
+
+        <section class="panel">
+            <div class="filtros">
+                <span class="filtros-titulo">Mostrar:</span>
+
+                <label class="filtro">
+                    <input type="checkbox" value="E" checked>
+                    <span class="punto examen"></span> Exámenes
+                </label>
+
+                <label class="filtro">
+                    <input type="checkbox" value="T" checked>
+                    <span class="punto trabajo"></span> Trabajos
+                </label>
+
+                <label class="filtro">
+                    <input type="checkbox" value="R" checked>
+                    <span class="punto entrega"></span> Entregas
+                </label>
+
+                <label class="filtro">
+                    <input type="checkbox" value="O" checked>
+                    <span class="punto otro"></span> Otros
+                </label>
+
+                <label class="filtro">
+                    <input type="checkbox" value="C" checked>
+                    <span class="punto cumple"></span> Cumpleaños
+                </label>
+            </div>
+
+            <div class="calendario">
+                <div class="dia-semana">LUN</div>
+                <div class="dia-semana">MAR</div>
+                <div class="dia-semana">MIÉ</div>
+                <div class="dia-semana">JUE</div>
+                <div class="dia-semana">VIE</div>
+                <div class="dia-semana">SÁB</div>
+                <div class="dia-semana">DOM</div>
+
+                <div id="dias-calendario" class="dias-calendario"></div>
+            </div>
+
+            <p class="ayuda">
+                Selecciona un evento para consultar sus detalles.
+            </p>
+        </section>
+
+        <section class="panel proximos-panel">
+            <div class="seccion-cabecera">
+                <div>
+                    <p class="sobretitulo">AGENDA COMPARTIDA</p>
+                    <h2>Próximos eventos</h2>
+                </div>
+            </div>
+
+            <div id="proximos-eventos" class="proximos-eventos">
+                Cargando eventos...
             </div>
         </section>
 
-        <section id="contenidoCalendario" hidden>
-            <section class="resumen">
-                <div>
-                    <span class="resumen-icono" aria-hidden="true">📚</span>
-                    <div>
-                        <p class="resumen-titulo">Toda la clase, al día</p>
-                        <p class="resumen-texto">
-                            Exámenes, trabajos, lecturas y fechas importantes
-                            del curso.
-                        </p>
-                    </div>
-                </div>
+        <p id="mensaje-carga" class="mensaje-carga" role="status"></p>
 
-                <button id="hoyBtn" type="button"
-                        class="boton boton-secundario">
-                    Ir a hoy
-                </button>
-            </section>
-
-            <section class="panel-filtros" aria-label="Filtros de eventos">
-                <div class="seccion-titulo">
-                    <div>
-                        <h2>Eventos de la clase</h2>
-                        <p>Selecciona una categoría para filtrar.</p>
-                    </div>
-                    <span id="contadorEventos" class="contador">0 eventos</span>
-                </div>
-
-                <div class="menu" role="group" aria-label="Categorías">
-                    <button type="button" class="filtro activo"
-                            data-filtro="ALL" aria-pressed="true">
-                        Todos
-                    </button>
-
-                    <button type="button" class="filtro"
-                            data-filtro="E" aria-pressed="false">
-                        <span class="punto E"></span> Exámenes
-                    </button>
-
-                    <button type="button" class="filtro"
-                            data-filtro="T" aria-pressed="false">
-                        <span class="punto T"></span> Trabajos
-                    </button>
-
-                    <button type="button" class="filtro"
-                            data-filtro="R" aria-pressed="false">
-                        <span class="punto R"></span> Lecturas
-                    </button>
-
-                    <button type="button" class="filtro"
-                            data-filtro="O" aria-pressed="false">
-                        <span class="punto O"></span> Exposiciones
-                    </button>
-
-                    <button type="button" class="filtro"
-                            data-filtro="C" aria-pressed="false">
-                        <span class="punto C"></span> Cumpleaños
-                    </button>
-                </div>
-            </section>
-
-            <section class="zona-calendario" aria-label="Calendario mensual">
-                <div class="mes-control">
-                    <button id="mesAnterior" class="flecha"
-                            type="button" aria-label="Mes anterior">‹</button>
-
-                    <div class="mes-titulo">
-                        <h2 id="mesActual" aria-live="polite"></h2>
-                        <p>Curso 2026-2027</p>
-                    </div>
-
-                    <button id="mesSiguiente" class="flecha"
-                            type="button" aria-label="Mes siguiente">›</button>
-                </div>
-
-                <div class="dias-semana" aria-hidden="true">
-                    <div>Lun</div>
-                    <div>Mar</div>
-                    <div>Mié</div>
-                    <div>Jue</div>
-                    <div>Vie</div>
-                    <div>Sáb</div>
-                    <div>Dom</div>
-                </div>
-
-                <div id="calendario" class="calendario"></div>
-
-                <p class="ayuda-calendario">
-                    Pulsa sobre un evento para consultar sus detalles.
-                </p>
-            </section>
-
-            <section class="panel-proximos">
-                <div class="seccion-titulo">
-                    <div>
-                        <h2>Próximos eventos</h2>
-                        <p>Las próximas fechas importantes del curso.</p>
-                    </div>
-                </div>
-
-                <div id="listaProximos" class="lista-proximos"></div>
-            </section>
-
-            <footer class="pie">
-                Calendario compartido · 4.º ESO · 2026-2027
-            </footer>
-        </section>
+        <footer class="pie">
+            Calendario compartido de clase · 4.º ESO · 2026–2027
+        </footer>
     </main>
 
-    <dialog id="detalleDialog" class="detalle-dialog">
-        <div class="detalle-cabecera">
-            <span id="detalleCategoria" class="etiqueta"></span>
-            <button id="cerrarDetalle" class="cerrar-dialogo"
-                    type="button" aria-label="Cerrar">×</button>
+    <dialog id="dialogo-evento" class="dialogo">
+        <div class="dialogo-contenido">
+            <button id="cerrar-dialogo" class="cerrar-dialogo"
+                type="button" aria-label="Cerrar">×</button>
+
+            <p id="detalle-categoria" class="sobretitulo"></p>
+            <h2 id="detalle-titulo">Detalle del evento</h2>
+            <p id="detalle-fecha" class="detalle-fecha"></p>
+            <p id="detalle-descripcion" class="detalle-descripcion"></p>
+
+            <button id="aceptar-dialogo" class="boton-principal"
+                type="button">Cerrar</button>
         </div>
-
-        <p id="detalleFecha" class="detalle-fecha"></p>
-        <h2 id="detalleAsignatura"></h2>
-        <p id="detalleDescripcion" class="detalle-descripcion"></p>
-
-        <button id="cerrarDetalleBtn" type="button"
-                class="boton boton-principal">
-            Cerrar
-        </button>
     </dialog>
 </body>
 </html>
