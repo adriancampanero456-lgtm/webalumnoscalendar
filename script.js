@@ -91,7 +91,7 @@ async function cargarDatos() {
 
         if (!respuesta.ok) {
             throw new Error(
-                `No se pudo leer datos.txt (HTTP ${respuesta.status}).`
+                `No se pudo leer base de datos.`
             );
         }
 
