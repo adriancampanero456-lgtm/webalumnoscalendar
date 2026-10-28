@@ -18,6 +18,48 @@
     --cumple: #fde68a;
 }
 
+/* =========================================
+   RELOJ SINCRONIZADO CON INTERNET
+========================================= */
+
+.reloj-internet {
+    padding: 22px 18px;
+    text-align: center;
+    background: var(--superficie);
+    border: 1px solid var(--borde);
+    border-radius: 17px;
+    box-shadow: var(--sombra);
+}
+
+.reloj-internet-fecha {
+    margin: 0 0 5px;
+    color: var(--secundario);
+    font-size: 14px;
+    text-transform: capitalize;
+}
+
+.reloj-internet-hora {
+    margin: 0;
+    color: var(--texto);
+    font-size: clamp(36px, 7vw, 56px);
+    font-weight: 800;
+    line-height: 1.2;
+    letter-spacing: 2px;
+    font-variant-numeric: tabular-nums;
+}
+
+.reloj-internet-estado {
+    margin: 8px 0 0;
+    color: var(--secundario);
+    font-size: 11px;
+}
+
+body.dark .reloj-internet {
+    background: var(--superficie);
+    border-color: var(--borde);
+}
+
+
 body.dark {
     color-scheme: dark;
     --fondo: #0b1120;
