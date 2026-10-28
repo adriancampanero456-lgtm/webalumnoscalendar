@@ -129,10 +129,8 @@ export default async function handler(req, res) {
       const data = await response.json().catch(() => ({}));
 
       if (!response.ok) {
-        return res
-          .status(response.status === 404 ? 404 : 502)
-          .json({
-            error: "No se pudo leer el archivo de GitHub."
+        return res(response.status).json({
+          error: "No se pudo leer el archivo de GitHub.",
           });
       }
 
