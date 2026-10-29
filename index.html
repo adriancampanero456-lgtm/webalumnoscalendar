@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -15,6 +14,14 @@
 </head>
 
 <body>
+    <div id="pantallaMantenimiento" class="mantenimiento-pantalla" hidden>
+        <div class="mantenimiento-card">
+            <div class="mantenimiento-icono" aria-hidden="true">🛠️</div>
+            <h1>Sitio en mantenimiento</h1>
+            <p>Estamos realizando mejoras. Vuelve más tarde.</p>
+        </div>
+    </div>
+
     <header class="cabecera">
         <div class="cabecera-contenido">
             <div>
@@ -52,61 +59,11 @@
         <section id="contenidoCalendario" hidden>
             <section class="resumen">
                 <div>
-                    <span class="resumen-icono" aria-hidden="true">📚</span>
-                    <div>
-                        <p class="resumen-titulo">Toda la clase, al día</p>
-                        <p class="resumen-texto">
-                            Exámenes, trabajos, lecturas y fechas importantes
-                            del curso.
-                        </p>
-                    </div>
-                </div>
-
-                <button id="hoyBtn" type="button"
-                        class="boton boton-secundario">
-                    Ir a hoy
-                </button>
-            </section>
-
-            <section class="panel-filtros" aria-label="Filtros de eventos">
-                <div class="seccion-titulo">
-                    <div>
-                        <h2>Eventos de la clase</h2>
-                        <p>Selecciona una categoría para filtrar.</p>
-                    </div>
-                    <span id="contadorEventos" class="contador">0 eventos</span>
-                </div>
-
-                <div class="menu" role="group" aria-label="Categorías">
-                    <button type="button" class="filtro activo"
-                            data-filtro="ALL" aria-pressed="true">
-                        Todos
-                    </button>
-
-                    <button type="button" class="filtro"
-                            data-filtro="E" aria-pressed="false">
-                        <span class="punto E"></span> Exámenes
-                    </button>
-
-                    <button type="button" class="filtro"
-                            data-filtro="T" aria-pressed="false">
-                        <span class="punto T"></span> Trabajos
-                    </button>
-
-                    <button type="button" class="filtro"
-                            data-filtro="R" aria-pressed="false">
-                        <span class="punto R"></span> Lecturas
-                    </button>
-
-                    <button type="button" class="filtro"
-                            data-filtro="O" aria-pressed="false">
-                        <span class="punto O"></span> Exposiciones
-                    </button>
-
-                    <button type="button" class="filtro"
-                            data-filtro="C" aria-pressed="false">
-                        <span class="punto C"></span> Cumpleaños
-                    </button>
+                    <p class="resumen-titulo">Toda la clase, al día</p>
+                    <p class="resumen-texto">
+                        Exámenes, trabajos, lecturas y fechas importantes
+                        del curso.
+                    </p>
                 </div>
             </section>
 
