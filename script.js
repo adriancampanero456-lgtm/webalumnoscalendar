@@ -66,14 +66,12 @@ function mostrarFechaHoy() {
     $("hoy").textContent = `Hoy es ${formatoFecha(new Date())}`;
 }
 
-// Sincronizar hora y fecha de internet mediante fetch HTTP headers o API pública gratuita
 async function iniciarRelojInternet() {
     let offsetMs = 0;
 
     async function sincronizarConServidor() {
         try {
             const inicioPeticion = performance.now();
-            // Solicitud ligera a un servidor público de hora de internet o cabecera de respuesta propia
             const respuesta = await fetch("https://worldtimeapi.org/api/ip", { cache: "no-store" });
             const finPeticion = performance.now();
             
@@ -85,16 +83,13 @@ async function iniciarRelojInternet() {
                 offsetMs = horaEstimadaServidor - Date.now();
             }
         } catch (e) {
-            // Si falla la API externa, usa la hora local del dispositivo automáticamente
             offsetMs = 0;
         }
     }
 
-    // Sincronizar al iniciar y cada 30 minutos
     await sincronizarConServidor();
     setInterval(sincronizarConServidor, 30 * 60 * 1000);
 
-    // Actualizar cada segundo en pantalla con formato hh:mm:ss
     setInterval(() => {
         const ahora = new Date(Date.now() + offsetMs);
         const horas = String(ahora.getHours()).padStart(2, "0");
