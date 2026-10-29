@@ -126,6 +126,23 @@ button:disabled {
     gap: 20px;
 }
 
+.cabecera-acciones {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.reloj-internet {
+    padding: 10px 14px;
+    background: var(--fondo);
+    border: 1px solid var(--borde);
+    border-radius: 12px;
+    font-family: monospace;
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--texto);
+}
+
 .sobretitulo {
     margin: 0 0 5px;
     color: var(--primario);
@@ -193,6 +210,10 @@ h1, h2, p {
 /* RESUMEN */
 
 .resumen {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 15px;
     padding: 20px;
     background: var(--suave);
     border: 1px solid var(--borde);
@@ -220,6 +241,7 @@ h1, h2, p {
     font-weight: 700;
     cursor: pointer;
     transition: background .2s, transform .2s;
+    white-space: nowrap;
 }
 
 .boton:hover {
@@ -519,7 +541,7 @@ h1, h2, p {
     text-align: center;
 }
 
-/* DETALLE */
+/* DETALLE Y HORARIO DIALOG */
 
 .detalle-dialog {
     width: min(92%, 440px);
@@ -529,6 +551,10 @@ h1, h2, p {
     background: var(--superficie);
     color: var(--texto);
     box-shadow: var(--sombra);
+}
+
+.horario-dialog {
+    width: min(95%, 700px);
 }
 
 .detalle-dialog::backdrop {
@@ -585,6 +611,37 @@ h1, h2, p {
     margin: 15px 0 22px;
     line-height: 1.7;
     white-space: pre-wrap;
+}
+
+/* TABLA HORARIO */
+
+.tabla-horario-contenedor {
+    width: 100%;
+    overflow-x: auto;
+}
+
+.tabla-horario {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 12px;
+    text-align: left;
+}
+
+.tabla-horario th,
+.tabla-horario td {
+    padding: 10px;
+    border: 1px solid var(--borde);
+}
+
+.tabla-horario th {
+    background: var(--suave);
+    color: var(--primario);
+    font-weight: 800;
+    text-align: center;
+}
+
+.tabla-horario td {
+    text-align: center;
 }
 
 /* ERROR */
@@ -651,7 +708,14 @@ h1, h2, p {
     }
 
     .resumen {
+        flex-direction: column;
+        align-items: stretch;
         padding: 15px;
+    }
+
+    .reloj-internet {
+        font-size: 13px;
+        padding: 8px 10px;
     }
 
     .zona-calendario,
