@@ -1,5 +1,4 @@
 
-29,10,E,Matemáticas,Examen Tema 1
 30,10,E,Biología,Examen Tema 1.2
 
 2,11,E,EEV,Examen Tema 1
