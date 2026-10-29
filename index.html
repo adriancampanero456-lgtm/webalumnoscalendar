@@ -18,7 +18,7 @@
         <div class="mantenimiento-card">
             <div class="mantenimiento-icono" aria-hidden="true">🛠️</div>
             <h1>Sitio en mantenimiento</h1>
-            <p></p>
+            <p>Estamos realizando mejoras. Vuelve más tarde.</p>
         </div>
     </div>
 
@@ -31,12 +31,15 @@
                 <p id="hoy" class="fecha-hoy"></p>
             </div>
 
-            <button id="temaBtn" class="tema-btn"
-                    type="button"
-                    aria-label="Activar modo oscuro"
-                    title="Cambiar tema">
-                🌙
-            </button>
+            <div class="cabecera-acciones">
+                <div id="relojInternet" class="reloj-internet" aria-label="Hora actual de internet">--:--:--</div>
+                <button id="temaBtn" class="tema-btn"
+                        type="button"
+                        aria-label="Activar modo oscuro"
+                        title="Cambiar tema">
+                    🌙
+                </button>
+            </div>
         </div>
     </header>
 
@@ -65,6 +68,11 @@
                         del curso.
                     </p>
                 </div>
+
+                <button id="abrirHorarioBtn" type="button"
+                        class="boton boton-principal">
+                    📅 Ver Horario
+                </button>
             </section>
 
             <section class="zona-calendario" aria-label="Calendario mensual">
@@ -129,6 +137,85 @@
         <button id="cerrarDetalleBtn" type="button"
                 class="boton boton-principal">
             Cerrar
+        </button>
+    </dialog>
+
+    <dialog id="horarioDialog" class="detalle-dialog horario-dialog">
+        <div class="detalle-cabecera">
+            <span class="etiqueta">Horario escolar</span>
+            <button id="cerrarHorario" class="cerrar-dialogo"
+                    type="button" aria-label="Cerrar">×</button>
+        </div>
+
+        <h2 style="margin: 15px 0 10px;">Horario de clases</h2>
+        <p class="detalle-descripcion" style="margin-bottom: 20px;">
+            Aquí puedes consultar el horario lectivo semanal de 4.º de ESO para el curso actual.
+        </p>
+
+        <div class="tabla-horario-contenedor">
+            <table class="tabla-horario">
+                <thead>
+                    <tr>
+                        <th>Hora</th>
+                        <th>Lunes</th>
+                        <th>Martes</th>
+                        <th>Miércoles</th>
+                        <th>Jueves</th>
+                        <th>Viernes</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>08:00 - 09:00</strong></td>
+                        <td>Matemáticas</td>
+                        <td>Valenciano</td>
+                        <td>Inglés</td>
+                        <td>Matemáticas</td>
+                        <td>Biología</td>
+                    </tr>
+                    <tr>
+                        <td><strong>09:00 - 10:00</strong></td>
+                        <td>Biología</td>
+                        <td>Matemáticas</td>
+                        <td>Valenciano</td>
+                        <td>Inglés</td>
+                        <td>Geografía</td>
+                    </tr>
+                    <tr>
+                        <td><strong>10:00 - 11:00</strong></td>
+                        <td>Inglés</td>
+                        <td>Geografía</td>
+                        <td>Matemáticas</td>
+                        <td>Valenciano</td>
+                        <td>Física</td>
+                    </tr>
+                    <tr>
+                        <td><strong>11:00 - 11:30</strong></td>
+                        <td colspan="5" style="text-align: center; background: var(--suave);"><strong>RECREO</strong></td>
+                    </tr>
+                    <tr>
+                        <td><strong>11:30 - 12:30</strong></td>
+                        <td>Física</td>
+                        <td>Física</td>
+                        <td>Historia</td>
+                        <td>Biología</td>
+                        <td>Inglés</td>
+                    </tr>
+                    <tr>
+                        <td><strong>12:30 - 13:30</strong></td>
+                        <td>Valenciano</td>
+                        <td>Inglés</td>
+                        <td>Física</td>
+                        <td>Historia</td>
+                        <td>Matemáticas</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <button id="cerrarHorarioBtn" type="button"
+                class="boton boton-principal" style="margin-top: 20px; width: 100%;">
+            Cerrar Horario
         </button>
     </dialog>
 </body>
