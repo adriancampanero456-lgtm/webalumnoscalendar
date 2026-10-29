@@ -613,35 +613,22 @@ h1, h2, p {
     white-space: pre-wrap;
 }
 
-/* TABLA HORARIO */
+/* IMAGEN HORARIO */
 
-.tabla-horario-contenedor {
+.imagen-horario-contenedor {
     width: 100%;
-    overflow-x: auto;
-}
-
-.tabla-horario {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: 12px;
-    text-align: left;
-}
-
-.tabla-horario th,
-.tabla-horario td {
-    padding: 10px;
+    text-align: center;
+    overflow: hidden;
+    border-radius: 12px;
     border: 1px solid var(--borde);
+    background: var(--fondo);
 }
 
-.tabla-horario th {
-    background: var(--suave);
-    color: var(--primario);
-    font-weight: 800;
-    text-align: center;
-}
-
-.tabla-horario td {
-    text-align: center;
+.imagen-horario {
+    width: 100%;
+    height: auto;
+    display: block;
+    object-fit: contain;
 }
 
 /* ERROR */
