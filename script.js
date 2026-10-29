@@ -35,7 +35,7 @@ let mesActual = fechaInicial.getMonth() + 1;
 let añoActual = fechaInicial.getFullYear();
 
 /* =========================================
-   FECHAS
+   FECHAS Y HORA DE INTERNET
 ========================================= */
 
 function estaDentroDelCurso(año, mes) {
@@ -66,6 +66,48 @@ function mostrarFechaHoy() {
     $("hoy").textContent = `Hoy es ${formatoFecha(new Date())}`;
 }
 
+// Sincronizar hora y fecha de internet mediante fetch HTTP headers o API pública gratuita
+async function iniciarRelojInternet() {
+    let offsetMs = 0;
+
+    async function sincronizarConServidor() {
+        try {
+            const inicioPeticion = performance.now();
+            // Solicitud ligera a un servidor público de hora de internet o cabecera de respuesta propia
+            const respuesta = await fetch("https://worldtimeapi.org/api/ip", { cache: "no-store" });
+            const finPeticion = performance.now();
+            
+            if (respuesta.ok) {
+                const datos = await respuesta.json();
+                const fechaServidor = new Date(datos.datetime);
+                const tiempoRedonda = (finPeticion - inicioPeticion) / 2;
+                const horaEstimadaServidor = fechaServidor.getTime() + tiempoRedonda;
+                offsetMs = horaEstimadaServidor - Date.now();
+            }
+        } catch (e) {
+            // Si falla la API externa, usa la hora local del dispositivo automáticamente
+            offsetMs = 0;
+        }
+    }
+
+    // Sincronizar al iniciar y cada 30 minutos
+    await sincronizarConServidor();
+    setInterval(sincronizarConServidor, 30 * 60 * 1000);
+
+    // Actualizar cada segundo en pantalla con formato hh:mm:ss
+    setInterval(() => {
+        const ahora = new Date(Date.now() + offsetMs);
+        const horas = String(ahora.getHours()).padStart(2, "0");
+        const minutos = String(ahora.getMinutes()).padStart(2, "0");
+        const segundos = String(ahora.getSeconds()).padStart(2, "0");
+        
+        const relojEl = $("relojInternet");
+        if (relojEl) {
+            relojEl.textContent = `${horas}:${minutos}:${segundos}`;
+        }
+    }, 1000);
+}
+
 /* =========================================
    COMPROBAR MANTENIMIENTO
 ========================================= */
@@ -91,12 +133,6 @@ async function comprobarMantenimiento() {
 
 /* =========================================
    CARGAR DATOS.TXT
-
-   Eventos normales:
-   dia,mes,categoria,asignatura,descripcion
-
-   Cumpleaños:
-   dia,mes,C,persona
 ========================================= */
 
 async function cargarDatos() {
@@ -353,7 +389,7 @@ function generarCalendario() {
 }
 
 /* =========================================
-   DETALLES DEL EVENTO
+   DETALLES DEL EVENTO Y HORARIO
 ========================================= */
 
 function mostrarDetalle(evento) {
@@ -379,6 +415,14 @@ function mostrarDetalle(evento) {
 
 function cerrarDetalle() {
     $("detalleDialog").close();
+}
+
+function abrirHorario() {
+    $("horarioDialog").showModal();
+}
+
+function cerrarHorario() {
+    $("horarioDialog").close();
 }
 
 /* =========================================
@@ -562,6 +606,9 @@ $("temaBtn").addEventListener("click", () => {
 
 $("cerrarDetalle").addEventListener("click", cerrarDetalle);
 $("cerrarDetalleBtn").addEventListener("click", cerrarDetalle);
+$("abrirHorarioBtn").addEventListener("click", abrirHorario);
+$("cerrarHorario").addEventListener("click", cerrarHorario);
+$("cerrarHorarioBtn").addEventListener("click", cerrarHorario);
 $("reintentarBtn").addEventListener("click", cargarDatos);
 
 /* =========================================
@@ -569,6 +616,7 @@ $("reintentarBtn").addEventListener("click", cargarDatos);
 ========================================= */
 
 mostrarFechaHoy();
+iniciarRelojInternet();
 
 if (!estaDentroDelCurso(añoActual, mesActual)) {
     mesActual = 9;
