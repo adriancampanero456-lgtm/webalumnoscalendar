@@ -1,4 +1,3 @@
-
 "use strict";
 
 /* =========================================
@@ -28,7 +27,6 @@ const INICIO_CURSO = { mes: 9, año: 2026 };
 const FIN_CURSO = { mes: 6, año: 2027 };
 
 let eventos = [];
-let filtroActual = "ALL";
 
 const $ = id => document.getElementById(id);
 
@@ -53,7 +51,6 @@ function diasDelMes(mes, año) {
 }
 
 function fechaEvento(evento) {
-    // El formato de datos.txt no incluye año.
     const año = evento.mes >= 9 ? 2026 : 2027;
 
     return new Date(año, evento.mes - 1, evento.dia);
@@ -70,6 +67,29 @@ function mostrarFechaHoy() {
 }
 
 /* =========================================
+   COMPROBAR MANTENIMIENTO
+========================================= */
+
+async function comprobarMantenimiento() {
+    try {
+        const respuesta = await fetch("mantenimiento.txt", {
+            cache: "no-store"
+        });
+
+        if (respuesta.ok) {
+            const texto = await respuesta.text();
+            if (texto.trim() === "1") {
+                $("pantallaMantenimiento").hidden = false;
+                return true;
+            }
+        }
+    } catch (error) {
+        // Si no existe o da error, la web funciona normalmente
+    }
+    return false;
+}
+
+/* =========================================
    CARGAR DATOS.TXT
 
    Eventos normales:
@@ -80,6 +100,11 @@ function mostrarFechaHoy() {
 ========================================= */
 
 async function cargarDatos() {
+    const enMantenimiento = await comprobarMantenimiento();
+    if (enMantenimiento) {
+        return;
+    }
+
     $("contenidoCalendario").hidden = true;
     $("errorDB").hidden = true;
     $("reintentarBtn").disabled = true;
@@ -107,7 +132,6 @@ async function cargarDatos() {
         for (let i = 0; i < lineas.length; i++) {
             const linea = lineas[i].trim();
 
-            // Ignorar líneas vacías y comentarios.
             if (!linea || linea.startsWith("#")) {
                 continue;
             }
@@ -156,7 +180,6 @@ async function cargarDatos() {
             let descripcion;
 
             if (categoria === "C") {
-                // Cumpleaños: cuatro campos.
                 if (partes.length !== 4) {
                     throw new Error(
                         `El cumpleaños de la línea ${i + 1} debe tener 4 campos: dia,mes,C,persona.`
@@ -167,7 +190,6 @@ async function cargarDatos() {
                 descripcion = "Cumpleaños";
 
             } else {
-                // Resto de eventos: cinco campos o más.
                 if (partes.length < 5) {
                     throw new Error(
                         `El evento de la línea ${i + 1} necesita 5 campos: dia,mes,categoria,asignatura,descripcion.`
@@ -228,13 +250,6 @@ async function cargarDatos() {
    ACTUALIZAR VISTA
 ========================================= */
 
-function eventosFiltrados() {
-    return eventos.filter(evento =>
-        filtroActual === "ALL" ||
-        evento.categoria === filtroActual
-    );
-}
-
 function actualizarVista() {
     $("mesActual").textContent =
         `${MESES[mesActual - 1]} ${añoActual}`;
@@ -244,18 +259,6 @@ function actualizarVista() {
 
     $("mesSiguiente").disabled =
         !estaDentroDelCurso(añoActual, mesActual + 1);
-
-    document.querySelectorAll("[data-filtro]").forEach(boton => {
-        const activo = boton.dataset.filtro === filtroActual;
-
-        boton.classList.toggle("activo", activo);
-        boton.setAttribute("aria-pressed", String(activo));
-    });
-
-    const cantidad = eventosFiltrados().length;
-
-    $("contadorEventos").textContent =
-        `${cantidad} ${cantidad === 1 ? "evento" : "eventos"}`;
 
     generarCalendario();
     generarProximos();
@@ -277,14 +280,11 @@ function generarCalendario() {
         1
     ).getDay();
 
-    // Lunes = 0, domingo = 6.
     const desplazamiento = (primerDia + 6) % 7;
     const totalDias = diasDelMes(mesActual, añoActual);
 
     const hoy = new Date();
     hoy.setHours(0, 0, 0, 0);
-
-    const lista = eventosFiltrados();
 
     for (let posicion = 0; posicion < 42; posicion++) {
         const numeroDia = posicion - desplazamiento + 1;
@@ -315,7 +315,7 @@ function generarCalendario() {
 
         celda.appendChild(numero);
 
-        const eventosDia = lista.filter(evento =>
+        const eventosDia = eventos.filter(evento =>
             evento.dia === numeroDia &&
             evento.mes === mesActual
         );
@@ -391,7 +391,7 @@ function generarProximos() {
 
     hoy.setHours(0, 0, 0, 0);
 
-    const proximos = eventosFiltrados()
+    const proximos = eventos
         .map(evento => ({
             evento,
             fecha: fechaEvento(evento)
@@ -407,7 +407,7 @@ function generarProximos() {
 
         mensaje.className = "sin-eventos";
         mensaje.textContent =
-            "No hay próximos eventos para esta categoría.";
+            "No hay próximos eventos.";
 
         lista.appendChild(mensaje);
         return;
@@ -481,17 +481,6 @@ function generarProximos() {
 }
 
 /* =========================================
-   FILTROS
-========================================= */
-
-document.querySelectorAll("[data-filtro]").forEach(boton => {
-    boton.addEventListener("click", () => {
-        filtroActual = boton.dataset.filtro;
-        actualizarVista();
-    });
-});
-
-/* =========================================
    CAMBIAR MES
 ========================================= */
 
@@ -517,22 +506,6 @@ function cambiarMes(direccion) {
 
 $("mesAnterior").addEventListener("click", () => cambiarMes(-1));
 $("mesSiguiente").addEventListener("click", () => cambiarMes(1));
-
-$("hoyBtn").addEventListener("click", () => {
-    const hoy = new Date();
-    const mes = hoy.getMonth() + 1;
-    const año = hoy.getFullYear();
-
-    if (estaDentroDelCurso(año, mes)) {
-        mesActual = mes;
-        añoActual = año;
-    } else {
-        mesActual = 9;
-        añoActual = 2026;
-    }
-
-    actualizarVista();
-});
 
 /* =========================================
    MODO OSCURO
