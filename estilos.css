@@ -1,4 +1,3 @@
-
 :root {
     color-scheme: light;
     --fondo: #f1f5f9;
@@ -68,6 +67,46 @@ button:disabled {
     opacity: .35;
     cursor: not-allowed;
     transform: none !important;
+}
+
+/* PANTALLA DE MANTENIMIENTO */
+
+.mantenimiento-pantalla {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    display: grid;
+    place-items: center;
+    background: var(--fondo);
+    padding: 20px;
+}
+
+.mantenimiento-card {
+    text-align: center;
+    max-width: 420px;
+    width: 100%;
+    padding: 40px 30px;
+    background: var(--superficie);
+    border: 1px solid var(--borde);
+    border-radius: 20px;
+    box-shadow: var(--sombra);
+}
+
+.mantenimiento-icono {
+    font-size: 48px;
+    margin-bottom: 20px;
+}
+
+.mantenimiento-card h1 {
+    margin: 0 0 10px;
+    font-size: 24px;
+    font-weight: 800;
+}
+
+.mantenimiento-card p {
+    margin: 0;
+    color: var(--secundario);
+    font-size: 14px;
 }
 
 /* CABECERA */
@@ -154,31 +193,10 @@ h1, h2, p {
 /* RESUMEN */
 
 .resumen {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 15px;
     padding: 20px;
     background: var(--suave);
     border: 1px solid var(--borde);
     border-radius: 16px;
-}
-
-.resumen > div {
-    display: flex;
-    align-items: center;
-    gap: 14px;
-}
-
-.resumen-icono {
-    width: 48px;
-    height: 48px;
-    flex: 0 0 auto;
-    display: grid;
-    place-items: center;
-    background: var(--superficie);
-    border-radius: 14px;
-    font-size: 23px;
 }
 
 .resumen-titulo {
@@ -225,7 +243,6 @@ h1, h2, p {
 
 /* PANELES */
 
-.panel-filtros,
 .zona-calendario,
 .panel-proximos {
     padding: 20px;
@@ -254,63 +271,6 @@ h1, h2, p {
     color: var(--secundario);
     font-size: 13px;
 }
-
-.contador {
-    flex: 0 0 auto;
-    padding: 5px 10px;
-    background: var(--suave);
-    border-radius: 20px;
-    color: var(--primario);
-    font-size: 12px;
-    font-weight: 750;
-}
-
-/* FILTROS */
-
-.menu {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-}
-
-.filtro {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 7px;
-    padding: 9px 13px;
-    border: 1px solid var(--borde);
-    border-radius: 10px;
-    background: var(--superficie);
-    color: var(--texto);
-    font-size: 12px;
-    font-weight: 700;
-    cursor: pointer;
-    transition: border-color .2s, background .2s, color .2s;
-}
-
-.filtro:hover {
-    border-color: var(--primario);
-}
-
-.filtro.activo {
-    background: var(--primario);
-    border-color: var(--primario);
-    color: #ffffff;
-}
-
-.punto {
-    width: 9px;
-    height: 9px;
-    flex: 0 0 auto;
-    border-radius: 50%;
-}
-
-.punto.E { background: #ef7777; }
-.punto.T { background: #60a5fa; }
-.punto.R { background: #4ade80; }
-.punto.O { background: #c084fc; }
-.punto.C { background: #fbbf24; }
 
 /* NAVEGACIÓN DEL MES */
 
@@ -691,44 +651,13 @@ h1, h2, p {
     }
 
     .resumen {
-        align-items: flex-start;
         padding: 15px;
     }
 
-    .resumen > div {
-        align-items: flex-start;
-        gap: 9px;
-    }
-
-    .resumen-icono {
-        width: 37px;
-        height: 37px;
-        font-size: 19px;
-    }
-
-    .resumen-texto {
-        font-size: 12px;
-    }
-
-    .resumen .boton {
-        padding: 8px 10px;
-        white-space: nowrap;
-    }
-
-    .panel-filtros,
     .zona-calendario,
     .panel-proximos {
         padding: 12px;
         border-radius: 13px;
-    }
-
-    .menu {
-        gap: 6px;
-    }
-
-    .filtro {
-        padding: 8px 10px;
-        font-size: 11px;
     }
 
     .dias-semana,
@@ -782,10 +711,6 @@ h1, h2, p {
         width: 36px;
         height: 36px;
     }
-
-    .contador {
-        font-size: 10px;
-    }
 }
 
 @media (max-width: 390px) {
@@ -800,11 +725,6 @@ h1, h2, p {
     .tema-btn {
         width: 39px;
         height: 39px;
-    }
-
-    .filtro {
-        padding: 7px 8px;
-        gap: 5px;
     }
 
     .dias-semana,
