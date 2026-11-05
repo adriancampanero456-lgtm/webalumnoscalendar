@@ -23,3 +23,6 @@
 18,1,E,Valenciano,Prova llibre lectura
 
 8,2,C,Julen Dodero
+
+17,11,E,Física y Química,Tema 2
+20,11,E,Examen Religión,tema 1
