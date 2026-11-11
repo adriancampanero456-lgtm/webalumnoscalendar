@@ -30,3 +30,5 @@
 9,11,E,FOPP,Tema 2
 2,12,E,Valenciano,GLOBAL
 13,11,E,Economía,Examen Tema 2
+
+3,12,E,tecnología,examen tema 1
