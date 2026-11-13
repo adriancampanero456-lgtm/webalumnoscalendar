@@ -32,3 +32,5 @@
 13,11,E,Economía,Examen Tema 2
 
 3,12,E,tecnología,examen tema 1
+19,11,T,Geografía e Historia,Actividades U1 (Classroom)
+24,11,T,Geografía e Historia,Actividades U2 (Classroom)
