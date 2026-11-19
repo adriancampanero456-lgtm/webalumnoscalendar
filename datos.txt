@@ -9,6 +9,7 @@
 29,11,C,Nuria Porres
 30,11,E,Inglés,Reading Book Test
 30,11,O,Valenciano,Exposicions orals - Hugo - Martina - Iratxe - Nicolás - Sebastián - Joel M. - Blai - Nuria - Tatiana
+30,11,E,Castellano,Prueba de compresión oral y redacción
 
 4,12,E,Valenciano,Prova llibre lectura
 9,12,E,Inglés,Global Test Term 1 (Unit 1, 2)
