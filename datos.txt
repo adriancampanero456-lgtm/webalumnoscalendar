@@ -21,10 +21,7 @@
 8,2,C,Julen Dodero
 
 20,11,E,Religión,Examen Tema 1
-3,11,E,EEV,TEMA 1
-9,11,E,FOPP,Tema 2
-2,12,E,Valenciano,GLOBAL
-13,11,E,Economía,Examen Tema 2
+
 
 3,12,E,tecnología,examen tema 1
 19,11,T,Geografía e Historia,Actividades U1 (Classroom)
