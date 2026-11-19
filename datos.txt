@@ -1,9 +1,4 @@
 
-12,11,E,Inglés,Speaking Unit 2
-16,11,T,Inglés,Writing Unit 2 Deadline
-18,11,E,Inglés,Unit 2 Test
-18,11,E,Valenciano,Prova 2
-19,11,R,Inglés,Bring Reading Book Term 1 - Dr Jekyll and Mr Hyde - Robert Louis Stevenson (Burlington)
 
 21,11,C,Adrián Soriano
 29,11,C,Nuria Porres
