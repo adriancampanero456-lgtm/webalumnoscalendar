@@ -23,7 +23,7 @@
 20,11,E,Religión,Examen Tema 1
 
 
-3,12,E,tecnología,examen tema 1
+10,12,E,tecnología,examen tema 1
 19,11,T,Geografía e Historia,Actividades U1 (Classroom)
 24,11,T,Geografía e Historia,Actividades U2 (Classroom)
 23,11,E,Física y Química,Tema 2
